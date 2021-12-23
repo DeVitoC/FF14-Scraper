@@ -19,6 +19,7 @@ let miningNodeUnspoiledScraper = MiningNodeUnspoiledScraper()
 let miningNodesScraper = MiningNodeScraper()
 let fishingNodesScraper = FishingNodeScraper()
 let fishingCollectiblesScraper = FishingCollectiblesScraper()
+let gatheringNodesScraper = GatheringNodeScraper()
 
 
 // MARK: - Scraper calls
@@ -31,5 +32,6 @@ let fishingCollectiblesScraper = FishingCollectiblesScraper()
 //try fishingNodesFolkloreScraper.scrapeFishingNodesWiki()
 //try miningNodeUnspoiledScraper.scrapeMiningNodesWiki()
 //try miningNodesScraper.scrapeMiningNodesWiki()
-try fishingNodesScraper.scrapeFishingNodesWiki()
+//try fishingNodesScraper.scrapeFishingNodesWiki()
 //try fishingCollectiblesScraper.scrapeFishingCollectiblesWiki()
+try gatheringNodesScraper.scrapeGatheringNodesWiki()
