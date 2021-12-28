@@ -44,22 +44,26 @@ class GatheringNodeScraper {
         let itemName = try h1.text()
         
         // get item description
-        guard let div = try consoleGamesDocument.select("#mw-content-text").first(),
-              let div2 = div.children().first(), let div3 = div2.children().first(),
-              let blockquote = try div3.nextElementSibling() else { return }
-        var itemDescription = try blockquote.text()
+        guard let divCG1 = try consoleGamesDocument.select("#mw-content-text").first(),
+              let divCG2 = divCG1.children().first(),
+              let divCG3 = divCG2.children().first(),
+              let blockquoteCG1 = try divCG3.nextElementSibling() else { return }
+        var itemDescription = try blockquoteCG1.text()
         itemDescription.removeFirst()
         itemDescription.removeFirst()
         itemDescription.removeSubrange(String.Index(utf16Offset: itemDescription.count - 22, in: itemDescription)...String.Index(utf16Offset: itemDescription.count - 1, in: itemDescription))
         
         // get Source and location
-        guard let gatheringSpan = try consoleGamesDocument.select("#Gathered").first(), let gatheringH3 = gatheringSpan.parent(), let gatheringP = try gatheringH3.nextElementSibling(), let sourceA = gatheringP.children().first(), let locationA = try sourceA.nextElementSibling() else { return }
-        let itemSource = try sourceA.text().lowercased()
-        let itemLocation = try locationA.text().lowercased()
+        guard let gatheringSpanCG1 = try consoleGamesDocument.select("#Gathered").first(),
+                let gatheringH3CG1 = gatheringSpanCG1.parent(),
+                let gatheringPCG1 = try gatheringH3CG1.nextElementSibling(),
+                let sourceACG1 = gatheringPCG1.children().first()
+        else { return }
+        let itemSource = try sourceACG1.text().lowercased()
         
         // get coords
         var coords: [(Int, Int)] = []
-        let gatheringPText = try gatheringP.text()
+        let gatheringPText = try gatheringPCG1.text()
         guard let coordStart = gatheringPText.firstIndex(of: "("), let coordEnd = gatheringPText.firstIndex(of: ")") else { return }
         let coordComponents = gatheringPText[coordStart...coordEnd].replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "x", with: "").replacingOccurrences(of: "y", with: "").components(separatedBy: " / ")
         for coordComponent in coordComponents {
@@ -100,18 +104,16 @@ class GatheringNodeScraper {
               let trGE4 = thGE1.parent(),
               let tableGE3 = try trGE4.nextElementSibling()?.children().first()?.children().first(),
               let tbodyGE4 = tableGE3.children().first(),
-              let trGE5 = try tbodyGE4.children().first()?.nextElementSibling(),
-              let tdGE5 = try trGE5.children().first(), // to get location
-              let tdGE6 = try tdGE5.nextElementSibling(), // to get time
-              let tdGE7 = try tdGE6.nextElementSibling() // to get stars
+              let trGE5 = try tbodyGE4.children().first()?.nextElementSibling()
+//              let tdGE5 = try trGE5.children().first(), // to get location
+//              let tdGE6 = try tdGE5.nextElementSibling(), // to get time
+//              let tdGE7 = try tdGE6.nextElementSibling() // to get stars
         else { return }
-        let tdGE6Elements = try tdGE6.text().components(separatedBy: " ")
-        let tdGE7Elements = try tdGE7.text().components(separatedBy: " Perception ")
 //        print(tdGE5.children())
-        for child in tdGE6.children() {
-            print(try child.text())
-        }
-        print(try tdGE5.text())
+//        for child in tdGE6.children() {
+//            print(try child.text())
+//        }
+//        print(tbodyGE4)
     
         // assign item values
         let itemImgUrl = try aGE1.attr("href")
@@ -128,8 +130,67 @@ class GatheringNodeScraper {
             else { continue }
             itemLvl = td2Text
         }
-        let itemStars = tdGE7Elements[0].components(separatedBy: " ").last?.count ?? 0
-        var itemTimes: [Int]
+        
+        // get location information
+        var itemLocationInfo: [NodeLocationInfo] = []
+        for (index, tr) in tbodyGE4.children().enumerated() {
+            guard index != 0 else { continue }
+            guard let thisTD1 = tr.children().first(), // to get location and coords and source
+                  let thisTD2 = try thisTD1.nextElementSibling(), // to get time
+                  let thisTD3 = try thisTD2.nextElementSibling(), // to get stars
+                  let thisSmall = thisTD1.children().first()
+            else { continue }
+            
+            // get source and location for this node
+            var itemSource = ""
+            var itemLocation = ""
+            for child in thisSmall.children() {
+                if child.tagName() == "br" {
+                    continue
+                }
+                let childText = try child.text()
+                if childText.contains(":") {
+                    let childTextElements = childText.components(separatedBy: ":")
+                    itemSource = childTextElements[0]
+                } else {
+                    itemLocation = childText
+                }
+            }
+            
+            // get coords
+            let thisSmallText = try thisSmall.text()
+            if let openParenIndex = thisSmallText.lastIndex(of: "("),
+               let closeParenIndex = thisSmallText.lastIndex(of: ")") {
+                let coordStartIndex = thisSmallText.index(after: openParenIndex)
+                let coordEndIndex = thisSmallText.index(before: closeParenIndex)
+                let coords = thisSmallText[coordStartIndex...coordEndIndex].components(separatedBy: "")
+                print(coords)
+            }
+            
+            // get Time
+            let thisTD2Text = try thisTD2.text()
+            var time = 0
+            var timeOfDay = ""
+            for component in thisTD2Text.components(separatedBy: " ") {
+                if let timeInt = Int(component) {
+                    time = timeInt
+                } else if component == "AM" || component == "PM" {
+                    timeOfDay = component
+                }
+            }
+            var itemTime: Int? = nil
+            if timeOfDay == "AM" {
+                itemTime = time
+            } else if timeOfDay == "PM" {
+                itemTime = time + 12
+            }
+            
+            // get stars
+            let thisTD3Elements = try thisTD3.text().components(separatedBy: " Perception ")
+            let itemStars = thisTD3Elements[0].components(separatedBy: " ").last?.count ?? 0
+            
+//            let locationInfo = NodeLocationInfo(time: itemTime, location: itemLocation, source: itemSource, stars: itemStars, x: <#T##Double#>, y: <#T##Double#>)
+        }
         
         
 //        print()
