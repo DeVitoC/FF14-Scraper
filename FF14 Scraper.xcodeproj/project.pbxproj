@@ -24,6 +24,7 @@
 		E2A1CEAE277041180054D60D /* FishingNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */; };
 		E2A1CEB0277175840054D60D /* FishingCollectiblesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */; };
 		E2A1CEB22772C8DD0054D60D /* GatheringNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB12772C8DD0054D60D /* GatheringNodeScraper.swift */; };
+		E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +57,7 @@
 		E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingCollectiblesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEB12772C8DD0054D60D /* GatheringNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringNodeScraper.swift; sourceTree = "<group>"; };
+		E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeLocationInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */,
 				E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */,
 				E2A1CEB12772C8DD0054D60D /* GatheringNodeScraper.swift */,
+				E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */,
 			);
 			path = "FF14 Scraper";
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */,
 				E2A1CEA6276F08E80054D60D /* MiningNodeFolkloreScraper.swift in Sources */,
 				E20FD2CE2761122A0044CA36 /* GatheringNode.swift in Sources */,
 				E2A1CEAC276F0F5A0054D60D /* MiningNodesScraper.swift in Sources */,
