@@ -8,7 +8,7 @@
 import Foundation
 import SwiftSoup
 
-class MiningNodeScraper {
+class MiningNodesScraper {
     var nodes: [String: String] = [:]
     typealias FishingNodeDictionary = [String: GatheringNode]
     let nodeTypes = ["Rocky Outcrop", "Mineral Deposit"]

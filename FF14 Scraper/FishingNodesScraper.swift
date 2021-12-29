@@ -8,7 +8,7 @@
 import Foundation
 import SwiftSoup
 
-class FishingNodeScraper {
+class FishingNodesScraper {
     var nodes: [String: String] = [:]
     typealias FishingNodeDictionary = [String: FishingNode]
     let bait = ["Pill Bug", "Lugworm", "Bloodworm", "Crayfish Ball", "Butterworm", "Crow Fly", "Rat Tail", "Midge Basket", "Spinnerbait", "Crab Ball", "Floating Minnow", "Spoon Worm", "Sinking Minnow", "Goby Ball", "Northern Krill", "Yumizuno", "Glowworm", "Krill Cage Feeder", "Steel Jig", "Heavy Steel Jig", "Bass Ball", "Moth Pupa", "Brass Spoon Lure", "Saltwater Boilie", "Mythril Spoon Lure", "Syrphid Basket", "Freshwater Boilie", "Sand Gecko", "Sand Leech", "Chocobo Fly", "Stem Borer", "Topwater Frog", "Hoverworm"]

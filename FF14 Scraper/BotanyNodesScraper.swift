@@ -8,7 +8,7 @@
 import Foundation
 import SwiftSoup
 
-class BotanyNodeScraper {
+class BotanyNodesScraper {
     var nodes: [String: String] = [:]
     typealias BotanyNodeDictionary = [String: GatheringNode]
     let nodeTypes = ["Mature Tree", "Lush Vegetation Patch"]

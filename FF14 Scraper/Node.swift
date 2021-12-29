@@ -9,7 +9,7 @@ import Foundation
 
 protocol Node: Codable {
     var name: String { get }
-    var time: Int { get }
+    var time: Int? { get }
     var location: String { get }
     var img: String { get }
     var description: String { get }
@@ -17,8 +17,8 @@ protocol Node: Codable {
     var source: String { get }
     var lvl: Int { get }
     var stars: Int { get }
-    var x: Double { get }
-    var y: Double { get }
+    var x: Int { get }
+    var y: Int { get }
     var expac: Int { get }
     var gathering: Int { get }
 }

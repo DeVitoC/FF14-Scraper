@@ -9,7 +9,7 @@ import Foundation
 
 struct FishingNode: Node {
     let name: String
-    let time: Int
+    let time: Int?
     let duration: Int
     let location: String
     let img: String
@@ -18,8 +18,8 @@ struct FishingNode: Node {
     let source: String
     let lvl: Int
     let stars: Int
-    let x: Double
-    let y: Double
+    let x: Int
+    let y: Int
     let expac: Int
     let desynthLvl: Int
     let desynthJob: String

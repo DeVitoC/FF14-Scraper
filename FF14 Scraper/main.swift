@@ -9,17 +9,19 @@ import Foundation
 import SwiftSoup
 
 // MARK: - Scraper Objects
-let botanyNodesScraper = BotanyNodeScraper()
+let botanyNodesScraper = BotanyNodesScraper()
 let botanyNodesFolkloreScraper = BotanyNodeFolkloreScraper()
 let botanyNodesUnspoiledScraper = BotanyNodeUnspoiledScraper()
 let botanynodesEphermeralScraper = EphemeralNodesScraper()
 let miningNodesFolkloreScraper = MiningNodeFolkloreScraper()
 let fishingNodesFolkloreScraper = FishingNodeFolkloreScraper()
 let miningNodeUnspoiledScraper = MiningNodeUnspoiledScraper()
-let miningNodesScraper = MiningNodeScraper()
-let fishingNodesScraper = FishingNodeScraper()
+let miningNodesScraper = MiningNodesScraper()
+let fishingNodesScraper = FishingNodesScraper()
 let fishingCollectiblesScraper = FishingCollectiblesScraper()
-let gatheringNodesScraper = GatheringNodeScraper()
+let botanyNodeScraper = BotanyNodeScraper()
+let miningNodeScraper = MiningNodeScraper()
+let fishingNodeScraper = FishingNodeScraper()
 
 
 // MARK: - Scraper calls
@@ -34,4 +36,6 @@ let gatheringNodesScraper = GatheringNodeScraper()
 //try miningNodesScraper.scrapeMiningNodesWiki()
 //try fishingNodesScraper.scrapeFishingNodesWiki()
 //try fishingCollectiblesScraper.scrapeFishingCollectiblesWiki()
-try gatheringNodesScraper.scrapeGatheringNodesWiki()
+//try botanyNodeScraper.scrapeGatheringNodesWiki()
+//try miningNodeScraper.scrapeGatheringNodesWiki()
+try fishingNodeScraper.scrapeGatheringNodesWiki()

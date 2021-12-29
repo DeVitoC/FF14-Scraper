@@ -23,8 +23,9 @@
 		E2A1CEAC276F0F5A0054D60D /* MiningNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAB276F0F5A0054D60D /* MiningNodesScraper.swift */; };
 		E2A1CEAE277041180054D60D /* FishingNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */; };
 		E2A1CEB0277175840054D60D /* FishingCollectiblesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */; };
-		E2A1CEB22772C8DD0054D60D /* GatheringNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB12772C8DD0054D60D /* GatheringNodeScraper.swift */; };
+		E2A1CEB22772C8DD0054D60D /* BotanyNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB12772C8DD0054D60D /* BotanyNodeScraper.swift */; };
 		E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */; };
+		E2A801D2277C011A002A18AC /* MiningNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,8 +57,9 @@
 		E2A1CEAB276F0F5A0054D60D /* MiningNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningNodesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingCollectiblesScraper.swift; sourceTree = "<group>"; };
-		E2A1CEB12772C8DD0054D60D /* GatheringNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatheringNodeScraper.swift; sourceTree = "<group>"; };
+		E2A1CEB12772C8DD0054D60D /* BotanyNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotanyNodeScraper.swift; sourceTree = "<group>"; };
 		E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeLocationInfo.swift; sourceTree = "<group>"; };
+		E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningNodeScraper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +108,8 @@
 				E2A1CEAB276F0F5A0054D60D /* MiningNodesScraper.swift */,
 				E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */,
 				E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */,
-				E2A1CEB12772C8DD0054D60D /* GatheringNodeScraper.swift */,
+				E2A1CEB12772C8DD0054D60D /* BotanyNodeScraper.swift */,
+				E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */,
 				E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */,
 			);
 			path = "FF14 Scraper";
@@ -176,12 +179,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2A801D2277C011A002A18AC /* MiningNodeScraper.swift in Sources */,
 				E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */,
 				E2A1CEA6276F08E80054D60D /* MiningNodeFolkloreScraper.swift in Sources */,
 				E20FD2CE2761122A0044CA36 /* GatheringNode.swift in Sources */,
 				E2A1CEAC276F0F5A0054D60D /* MiningNodesScraper.swift in Sources */,
 				E2A1CEAA276F0DA90054D60D /* MiningNodesUnspoiledScraper.swift in Sources */,
-				E2A1CEB22772C8DD0054D60D /* GatheringNodeScraper.swift in Sources */,
+				E2A1CEB22772C8DD0054D60D /* BotanyNodeScraper.swift in Sources */,
 				E20FD2D4276115220044CA36 /* BotanyNodesScraper.swift in Sources */,
 				E20FD2DA2761197D0044CA36 /* EphemeralNodesScraper.swift in Sources */,
 				E2A1CEA8276F0C2D0054D60D /* FishingNodeFolkloreScraper.swift in Sources */,

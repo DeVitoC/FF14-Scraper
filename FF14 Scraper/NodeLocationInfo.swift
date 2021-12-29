@@ -12,6 +12,6 @@ struct NodeLocationInfo {
     let location: String
     let source: String
     let stars: Int
-    let x: Double
-    let y: Double
+    let x: Int
+    let y: Int
 }
