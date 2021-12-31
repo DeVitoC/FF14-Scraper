@@ -26,6 +26,7 @@
 		E2A1CEB22772C8DD0054D60D /* BotanyNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB12772C8DD0054D60D /* BotanyNodeScraper.swift */; };
 		E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */; };
 		E2A801D2277C011A002A18AC /* MiningNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */; };
+		E2A801D4277C1948002A18AC /* FishingNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +61,7 @@
 		E2A1CEB12772C8DD0054D60D /* BotanyNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotanyNodeScraper.swift; sourceTree = "<group>"; };
 		E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeLocationInfo.swift; sourceTree = "<group>"; };
 		E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningNodeScraper.swift; sourceTree = "<group>"; };
+		E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodeScraper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */,
 				E2A1CEB12772C8DD0054D60D /* BotanyNodeScraper.swift */,
 				E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */,
+				E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */,
 				E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */,
 			);
 			path = "FF14 Scraper";
@@ -180,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2A801D2277C011A002A18AC /* MiningNodeScraper.swift in Sources */,
+				E2A801D4277C1948002A18AC /* FishingNodeScraper.swift in Sources */,
 				E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */,
 				E2A1CEA6276F08E80054D60D /* MiningNodeFolkloreScraper.swift in Sources */,
 				E20FD2CE2761122A0044CA36 /* GatheringNode.swift in Sources */,
