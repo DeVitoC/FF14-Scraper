@@ -9,11 +9,11 @@ import Foundation
 import SwiftSoup
 
 class FishingNodeScraper {
-    var nodesToSearch: [String: String] = [:]
-    var nodes: [FishingNode] = []
-    var missedNodes: [String] = []
-    let locations = ["Limsa Lominsa Upper Decks", "Limsa Lominsa Lower Decks", "Eastern La Noscea", "Lower La Noscea", "Middle La Noscea", "Upper La Noscea", "Western La Noscea", "Outer La Noscea", "New Gridania", "Old Gridania", "Central Shroud", "East Shroud", "North Shroud", "South Shroud", "Central Thanalan", "Eastern Thanalan", "Northern Thanalan", "Southern Thanalan", "Western Thanalan", "The Lavender Beds", "Coerthas Central Highlands", "Coerthas Western Highlands", "Mor Dhona", "Mists", "Labender Beds", "The Dravanian Forelands", "The Dravanian Hinterlands", "The Churning Mists", "The Sea of Clouds", "The Fringes", "The Peaks", "The Ruby Sea", "The Azim Steppe", "Yanxia", "The Lochs", "Amh Araeng", "Lakeland", "Kholusia", "Il Mheg", "The Rak'tika Greatwood", "Labyrinthos", "Thavnair", "Garlemald", "Azys Lla", "The Tempest", "Rhalgr's Reach"]
-    let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
+    private var nodesToSearch: [String: String] = [:]
+    private var nodes: [FishingNode] = []
+    private var missedNodes: [String] = []
+    private let locations = ["Limsa Lominsa Upper Decks", "Limsa Lominsa Lower Decks", "Eastern La Noscea", "Lower La Noscea", "Middle La Noscea", "Upper La Noscea", "Western La Noscea", "Outer La Noscea", "New Gridania", "Old Gridania", "Central Shroud", "East Shroud", "North Shroud", "South Shroud", "Central Thanalan", "Eastern Thanalan", "Northern Thanalan", "Southern Thanalan", "Western Thanalan", "The Lavender Beds", "Coerthas Central Highlands", "Coerthas Western Highlands", "Mor Dhona", "Mists", "Labender Beds", "The Dravanian Forelands", "The Dravanian Hinterlands", "The Churning Mists", "The Sea of Clouds", "The Fringes", "The Peaks", "The Ruby Sea", "The Azim Steppe", "Yanxia", "The Lochs", "Amh Araeng", "Lakeland", "Kholusia", "Il Mheg", "The Rak'tika Greatwood", "Labyrinthos", "Thavnair", "Garlemald", "Azys Lla", "The Tempest", "Rhalgr's Reach"]
+    private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
     
     func scrapeGatheringNodesWiki() throws {
         guard let consoleGamesWikiURL = URL(string: "https://ffxiv.consolegameswiki.com"),
@@ -45,7 +45,7 @@ class FishingNodeScraper {
         //            }
         //        }
         
-        try scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiURL, gamerEscapeURL: gamerEscapeWikiURL, testItem: "/wiki/Harbor_Herring")
+        try scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiURL, gamerEscapeURL: gamerEscapeWikiURL, testItem: "/wiki/Canavan")
         
 //        let encoder = JSONEncoder()
 //        encoder.outputFormatting = .prettyPrinted
@@ -166,52 +166,50 @@ class FishingNodeScraper {
                 }
             }
         }
-        
+
         // get location information
         for (index, div1) in tdGE5.children().enumerated() { // temp
             guard index > 2,
-                  let locationTbody = div1.children().first()?.children().first(),
-                  let baitTbody = try div1.children().first()?.nextElementSibling()?.children().first()
+                  let locationTbody = div1.children().first()?.children().first(), // to get location, water type, and coords
+                  let baitTbody = try div1.children().first()?.nextElementSibling()?.children().first(), // to get bait, mooch, time, weather
+                  let locationLineTR = try locationTbody.children().first()?.nextElementSibling(),
+                  let locationLineTD = locationLineTR.children().first()
             else {
-                print("index is 0 or 1 or 2")
                 continue
             }
-            print(div1)
+//            print(baitTbody)
             print()
-            guard let thisTD1 = div1.children().first(), // to get location and coords and source
-                  let thisTD2 = try thisTD1.nextElementSibling(), // to get time
-                  let thisTD3 = try thisTD2.nextElementSibling(), // to get stars
-                  let thisSmall = thisTD1.children().first()
+
+            // get location for this node
+            guard let locationAHREF = locationLineTD.children().first()
             else {
-//                print("unable to get element in lines 160 - 163")
-                missedNodes.append(testItem)
+                print("unable to get element in lines 180 - 183")
+//                missedNodes.append(testItem)
                 continue
             }
-//            print(thisSmall)
-            // get source and location for this node
-            var itemSource = ""
-            var itemLocation = ""
-            for child in thisSmall.children() {
-                if child.tagName() == "br" {
-                    continue
-                }
-                let childText = try child.text()
-                if childText.contains(":") {
-                    let childTextElements = childText.components(separatedBy: ":")
-                    itemSource = childTextElements[0]
-                } else {
-                    itemLocation = childText
-                }
+            var itemLocation = try locationAHREF.text()
+
+            // get water type for this node
+            guard let waterTypeTD = try locationLineTD.nextElementSibling()
+            else {
+                continue
             }
-            
+            var itemWaterType = try waterTypeTD.text()
+            let itemSource = getFishingSource(for: itemWaterType)
+
             // get coords
-            let thisSmallText = try thisSmall.text()
+            guard let coordsAHREF = try locationAHREF.nextElementSibling()
+            else {
+                continue
+            }
+
+            let locationLineText = try locationLineTD.text()
             var x: Int = 0, y: Int = 0
-            if let openParenIndex = thisSmallText.lastIndex(of: "("),
-               let closeParenIndex = thisSmallText.lastIndex(of: ")") {
-                let coordStartIndex = thisSmallText.index(after: openParenIndex)
-                let coordEndIndex = thisSmallText.index(before: closeParenIndex)
-                let coords = thisSmallText[coordStartIndex...coordEndIndex].components(separatedBy: "-")
+            if let openParenIndex = locationLineText.lastIndex(of: "("),
+               let closeParenIndex = locationLineText.lastIndex(of: ")") {
+                let coordStartIndex = locationLineText.index(after: openParenIndex)
+                let coordEndIndex = locationLineText.index(before: closeParenIndex)
+                let coords = locationLineText[coordStartIndex...coordEndIndex].components(separatedBy: "-")
                 if coords.count <= 1 {
                     x = 0
                     y = 0
@@ -220,45 +218,131 @@ class FishingNodeScraper {
                     y = Int(Float(coords[1]) ?? 0)
                 }
             } else {
-                print("unable to get elements in lines 189 - 190")
+                print("unable to get elements in lines 208 - 209")
                 missedNodes.append(testItem)
                 return
             }
-            
-            // get Time
-            let thisTD2Text = try thisTD2.text()
-            var time = 0
-            var timeOfDay = ""
-            var itemTimes: [Int?] = []
-            for thisTime in thisTD2Text.components(separatedBy: "/") {
-                for component in thisTime.components(separatedBy: " ") {
-                    if let timeInt = Int(component) {
-                        time = timeInt
-                    } else if component == "AM" || component == "PM" {
-                        timeOfDay = component
+
+            // get bait and mooch
+            guard let baitLineTR = baitTbody.children().first()
+            else {
+                continue
+            }
+            let baitText = (try? baitLineTR.text()) ?? ""
+            var itemMooch = false
+            var itemBait: [String] = []
+            var itemTime: Int? = nil
+            var itemDuration: Int = 0
+
+            for childTR in baitTbody.children() {
+                let childTRText = (try? childTR.text()) ?? ""
+
+                if childTRText.contains("Bait") {
+                    // Get Mooch
+                    itemMooch = childTRText.contains("Mooch")
+
+                    // Get bait
+                    if !itemMooch {
+                        let strippedBaitText = childTRText.replacingOccurrences(of: "Bait: ", with: "")
+                        itemBait = strippedBaitText.components(separatedBy: ",  ")
                     }
-                }
-                if timeOfDay == "AM" {
-                    itemTimes.append(time)
-                } else if timeOfDay == "PM" {
-                    itemTimes.append(time + 12)
+                } else if childTRText.contains("Mooch") {
+                    guard let childTD = childTR.children().first()
+                    else {
+                        continue
+                    }
+                    for child in childTD.children() {
+                        let childText = (try? child.text()) ?? ""
+
+                        if child.tagName() == "a" || childText == "►" {
+                            continue
+                        }
+
+                        guard let baitA = child.children().first()?.children().first()
+                        else {
+                            continue
+                        }
+                        let baitTitle = try baitA.attr("title")
+                        let strippedBaitTitle = baitTitle.replacingOccurrences(of: "HQ ", with: "")
+                        itemBait.append(strippedBaitTitle)
+                    }
+                } else if childTRText.contains("Conditions") {
+                    // get Time
+                    let conditionsText = childTRText.replacingOccurrences(of: "Conditions: ", with: "")
+                    let timesText = conditionsText.components(separatedBy: ",")[0]
+                    let timeStrings = timesText.components(separatedBy: "-")
+
+                    // Get start time
+                    let startTimeString = timeStrings[0]
+                    let strippedStartString = startTimeString.replacingOccurrences(of: "AM", with: "").replacingOccurrences(of: "PM", with: "")
+                    var startInt = Int(strippedStartString) ?? 0
+                    let startTimeOfDay = startTimeString.replacingOccurrences(of: "\(startInt)", with: "")
+                    if startTimeOfDay == "AM" {
+                        itemTime = startInt
+                    } else if startTimeOfDay == "PM" {
+                        startInt += 12
+                        itemTime = startInt
+                    }
+
+                    // Get duration
+                    let endTimeString = timeStrings[1]
+                    let strippedEndString = endTimeString.replacingOccurrences(of: "AM", with: "").replacingOccurrences(of: "PM", with: "")
+                    var endInt = Int(strippedEndString) ?? 0
+                    let endTimeOfDay = endTimeString.replacingOccurrences(of: "\(endInt)", with: "")
+                    if endTimeOfDay == "PM" {
+                        endInt += 12
+                    }
+                    itemDuration = endInt > startInt ? endInt - startInt : endInt + 24 - startInt
+                } else if childTRText.contains("Weather") {
+                    let weatherStringStripped = childTRText.replacingOccurrences(of: "Weather: ", with: "")
+                    print(weatherStringStripped)
                 }
             }
-            
-            // get stars
-            let thisTD3Elements = try thisTD3.text().components(separatedBy: " Perception ")
-            let itemStars = thisTD3Elements[0].components(separatedBy: " ").last?.count ?? 0
-            
-            for time in itemTimes {
-                let locationInfo = NodeLocationInfo(time: time, location: itemLocation, source: itemSource, stars: itemStars, x: x, y: y)
-                itemLocationInfo.append(locationInfo)
-                print(locationInfo)
-            }
+
+//            var time = 0
+//            var timeOfDay = ""
+//            var itemTimes: [Int?] = []
+//                if timeOfDay == "AM" {
+//                    itemTimes.append(time)
+//                } else if timeOfDay == "PM" {
+//                    itemTimes.append(time + 12)
+//                }
+//            }
+
+//            for time in itemTimes {
+//                let locationInfo = NodeLocationInfo(time: time, location: itemLocation, source: itemSource, stars: itemStars, x: x, y: y)
+//                itemLocationInfo.append(locationInfo)
+//                print(locationInfo)
+//            }
         }
         
-        //        for itemLocation in itemLocationInfo {
-//                    let fishingItem = FishingNode(name: itemName, time: <#T##Int?#>, duration: <#T##Int#>, location: <#T##String#>, img: itemImgUrl, description: itemDescription, type: itemType, source: <#T##String#>, lvl: itemLvl, stars: <#T##Int#>, x: <#T##Int#>, y: <#T##Int#>, expac: itemExpac, desynthLvl: <#T##Int#>, desynthJob: <#T##String#>, mooch: <#T##Bool#>, moochFrom: <#T##String#>, weather: <#T##[String]#>, waterType: <#T##String#>, gathering: <#T##Int#>)
-        //                nodes.append(gatheringItem)
-        //        }
+//        for itemLocation in itemLocationInfo {
+//            let fishingItem = FishingNode(name: itemName, time: itemLocation.time, duration: <#T##Int#>, location: itemLocation.location, img: itemImgUrl, description: itemDescription, type: itemType, source: <#T##String#>, lvl: itemLvl, stars: itemLocation.stars, x: itemLocation.x, y: itemLocation.y, expac: itemExpac, desynthLvl: <#T##Int#>, desynthJob: <#T##String#>, mooch: <#T##Bool#>, moochFrom: <#T##String#>, weather: <#T##[String]#>, waterType: <#T##String#>, gathering: 0)
+//            nodes.append(gatheringItem)
+//        }
+    }
+
+    /// Private method to get fishing source based on water type fish is found in
+    /// - Parameter waterType: String that descriptes the type of water the fish is found in
+    /// - Returns: String that descripes the fishing source
+    private func getFishingSource(for waterType: String) -> String {
+        switch waterType {
+            case "Saltwater", "Freshwater":
+                return "Fishing"
+            case "Aetherfishing":
+                return "Aetherfishing"
+            case "Cloudfishing":
+                return "Cloudfishing"
+            case "Dunefishing":
+                return "Dunefishing"
+            case "Magma":
+                return "Hellfishing"
+            case "Skies":
+                return "Skyfishing"
+            case "Starfishing":
+                return "Starfishing"
+            default:
+                return ""
+        }
     }
 }
