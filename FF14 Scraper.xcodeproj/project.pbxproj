@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E208F0042799FFF600DE3AF1 /* FishingNodeLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E208F0032799FFF600DE3AF1 /* FishingNodeLocationInfo.swift */; };
 		E20FD2C2276111340044CA36 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20FD2C1276111340044CA36 /* main.swift */; };
 		E20FD2CA2761118D0044CA36 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = E20FD2C92761118D0044CA36 /* SwiftSoup */; };
 		E20FD2CC276111C00044CA36 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20FD2CB276111C00044CA36 /* Node.swift */; };
@@ -42,6 +43,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E208F0032799FFF600DE3AF1 /* FishingNodeLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodeLocationInfo.swift; sourceTree = "<group>"; };
 		E20FD2BE276111340044CA36 /* FF14 Scraper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "FF14 Scraper"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E20FD2C1276111340044CA36 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E20FD2CB276111C00044CA36 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */,
 				E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */,
 				E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */,
+				E208F0032799FFF600DE3AF1 /* FishingNodeLocationInfo.swift */,
 			);
 			path = "FF14 Scraper";
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				E20FD2D4276115220044CA36 /* BotanyNodesScraper.swift in Sources */,
 				E20FD2DA2761197D0044CA36 /* EphemeralNodesScraper.swift in Sources */,
 				E2A1CEA8276F0C2D0054D60D /* FishingNodeFolkloreScraper.swift in Sources */,
+				E208F0042799FFF600DE3AF1 /* FishingNodeLocationInfo.swift in Sources */,
 				E20FD2C2276111340044CA36 /* main.swift in Sources */,
 				E2A1CEB0277175840054D60D /* FishingCollectiblesScraper.swift in Sources */,
 				E20FD2D02761126B0044CA36 /* FishingNode.swift in Sources */,
