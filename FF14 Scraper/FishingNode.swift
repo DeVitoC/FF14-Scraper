@@ -24,7 +24,7 @@ struct FishingNode: Node {
     let desynthLvl: Int
     let desynthJob: String
     let mooch: Bool
-    let moochFrom: String
+    let moochFrom: [String]
     let weather: [String]
     let waterType: String
     let gathering: Int
