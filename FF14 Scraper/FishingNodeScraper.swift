@@ -16,8 +16,7 @@ class FishingNodeScraper {
     private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
     
     func scrapeGatheringNodesWiki() throws {
-        guard let consoleGamesWikiURL = URL(string: "https://ffxiv.consolegameswiki.com"),
-              let gamerEscapeWikiURL = URL(string: "https://ffxiv.gamerescape.com")
+        guard let gamerEscapeWikiURL = URL(string: "https://ffxiv.gamerescape.com")
         else { return }
         let fm = FileManager.default
         lazy var path: URL = {
@@ -36,7 +35,7 @@ class FishingNodeScraper {
                 let data = Data(jsonData)
                 let itemNames = try jsonDecoder.decode([String: String].self, from: data)
                 for (_, address) in itemNames {
-                    try scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiURL, gamerEscapeURL: gamerEscapeWikiURL, testItem: address)
+                    try scrapeGatheringNodes(gamerEscapeURL: gamerEscapeWikiURL, testItem: address)
                     let seconds = 2.0
                     DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {}
                 }
@@ -45,7 +44,7 @@ class FishingNodeScraper {
             }
         }
 
-        try scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiURL, gamerEscapeURL: gamerEscapeWikiURL, testItem: "/wiki/The_Second_One")
+//        try scrapeGatheringNodes(gamerEscapeURL: gamerEscapeWikiURL, testItem: "/wiki/Dark_Knight_(Seafood)")
         
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
@@ -61,45 +60,47 @@ class FishingNodeScraper {
         try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
     }
     
-    private func scrapeGatheringNodes(consoleGamesURL: URL, gamerEscapeURL: URL, testItem: String) throws {
-        // scrape consoleGames Wiki
-        let consoleGamesWikiItemURL = consoleGamesURL.appendingPathComponent(testItem)
-        let consoleGamesHTML = try String(contentsOf: consoleGamesWikiItemURL)
-        let consoleGamesDocument = try SwiftSoup.parse(consoleGamesHTML)
-        
-        // get item name
-        guard let h1 = try consoleGamesDocument.select("#firstHeading").first() else {
-            print("unable to find firstHeading in consoleGameDocument")
-            missedNodes.append(testItem)
-            return
-        }
-        let itemName = try h1.text()
-        print("Scraping \(itemName)")
-        
-        // get item description
-        guard let divCG1 = try consoleGamesDocument.select("#mw-content-text").first(),
-              let divCG2 = divCG1.children().first(),
-              let divCG3 = divCG2.children().first(),
-              let blockquoteCG1 = try divCG3.nextElementSibling() else {
-                  print("unable to get divs or blockquote lines 79 - 82")
-                  missedNodes.append(testItem)
-                  return
-              }
-        var itemDescription = try blockquoteCG1.text()
-        itemDescription.removeFirst()
-        itemDescription.removeFirst()
-        itemDescription.removeSubrange(String.Index(utf16Offset: itemDescription.count - 22, in: itemDescription)...String.Index(utf16Offset: itemDescription.count - 1, in: itemDescription))
-        
+    private func scrapeGatheringNodes(gamerEscapeURL: URL, testItem: String) throws {
         // scrape GamerEscape wiki
         let gamerEscapeWikiItemURL = gamerEscapeURL.appendingPathComponent(testItem)
         let gamerEscapeHTML = try String(contentsOf: gamerEscapeWikiItemURL)
         let gamerEscapeDocument = try SwiftSoup.parse(gamerEscapeHTML)
-        
+
+        let itemName = testItem.replacingOccurrences(of: "/wiki/", with: "")
+        print(itemName)
+
         // Get item elements
         guard let divGE1 = try gamerEscapeDocument.select("#mw-content-text").first(),
-              let divGE2 = divGE1.children().first(),
-              let tableGE1 = divGE2.children().first(),
-              let tbodyGE1 = tableGE1.children().first(),
+              let divGE2 = divGE1.children().first()
+        else{
+            print("unable to get gamerEscape content text div lines 70-71")
+            missedNodes.append(testItem)
+            return
+        }
+        var tableGE1: Element
+        if divGE2.children().first()?.tagName() == "table" {
+            guard let tempTable = divGE2.children().first()
+            else {
+                print("Unable to get gamerEscape content text table line 104")
+                missedNodes.append(testItem)
+                return
+            }
+            tableGE1 = tempTable
+        } else if divGE2.children().first()?.tagName() == "div" {
+            guard let tempTable = try divGE2.children().first()?.nextElementSibling()
+            else {
+                print("unable to get gamerescape content text table line 115")
+                missedNodes.append(testItem)
+                return
+            }
+            tableGE1 = tempTable
+        } else {
+            print("unable to get gamerescape content table line 115")
+            missedNodes.append(testItem)
+            return
+        }
+
+        guard let tbodyGE1 = tableGE1.children().first(),
               let trGE1 = tbodyGE1.children().first(),
               let tdGE1 = trGE1.children().first(),
               let tableGE2 = tdGE1.children().first(),
@@ -119,6 +120,21 @@ class FishingNodeScraper {
             missedNodes.append(testItem)
             return
         }
+
+        // Get description
+        guard let descriptionTR = tbodyGE1.children().last(),
+              let descriptionTD = descriptionTR.children().first(),
+              let descriptionTable = descriptionTD.children().first(),
+              let descriptionTbody = descriptionTable.children().first(),
+              descriptionTbody.children().count > 3
+        else {
+            print("unable to get element in line 123-127")
+            missedNodes.append(testItem)
+            return
+        }
+        let descriptionTR2 = descriptionTbody.children()[2]
+        let itemDescription = try descriptionTR2.text()
+        print(itemDescription)
         
         // assign item values
         let itemImgUrl = try aGE1.attr("href")
@@ -285,6 +301,11 @@ class FishingNodeScraper {
                     let timesText = conditionsText.components(separatedBy: ",")[0]
                     let timeStrings = timesText.components(separatedBy: "-")
 
+                    // Make sure there is a start and end time
+                    if timeStrings.count < 2 {
+                        continue
+                    }
+
                     // Get start time
                     let startTimeString = timeStrings[0]
                     let strippedStartString = startTimeString.replacingOccurrences(of: "AM", with: "").replacingOccurrences(of: "PM", with: "")
@@ -336,11 +357,11 @@ class FishingNodeScraper {
               let desynthElementTD4 = try desynthElementTD3.nextElementSibling()
         else {
             print("unable to find Desynth in gamerescape document")
-            missedNodes.append(itemName)
+            missedNodes.append(testItem)
             return
         }
         let itemDesynth = try desynthElementTD4.text()
-        
+
         for itemLocation in itemLocationInfo {
             guard let itemLocation = itemLocation as? FishingNodeLocationInfo else { continue }
             let fishingItem = FishingNode(name: itemName, time: itemLocation.time, duration: itemLocation.duration, location: itemLocation.location, img: itemImgUrl, description: itemDescription, type: itemType, source: itemLocation.source, lvl: itemLvl, stars: itemStars, x: itemLocation.x, y: itemLocation.y, expac: itemExpac, desynthLvl: itemLvl, desynthJob: itemDesynth, mooch: itemLocation.mooch, moochFrom: itemLocation.bait, weather: itemLocation.weather, waterType: itemLocation.waterType, gathering: 0)
