@@ -11,6 +11,7 @@ import SwiftSoup
 class MiningNodeScraper {
     var nodesToSearch: [String: String] = [:]
     var nodes: [GatheringNode] = []
+    var missedNodes: [String] = []
     typealias GatheringNodeDictionary = [String: GatheringNode]
     let locations = ["Limsa Lominsa Upper Decks", "Limsa Lominsa Lower Decks", "Eastern La Noscea", "Lower La Noscea", "Middle La Noscea", "Upper La Noscea", "Western La Noscea", "Outer La Noscea", "New Gridania", "Old Gridania", "Central Shroud", "East Shroud", "North Shroud", "South Shroud", "Central Thanalan", "Eastern Thanalan", "Northern Thanalan", "Southern Thanalan", "Western Thanalan", "The Lavender Beds", "Coerthas Central Highlands", "Coerthas Western Highlands", "Mor Dhona", "Mists", "Labender Beds", "The Dravanian Forelands", "The Dravanian Hinterlands", "The Churning Mists", "The Sea of Clouds", "The Fringes", "The Peaks", "The Ruby Sea", "The Azim Steppe", "Yanxia", "The Lochs", "Amh Araeng", "Lakeland", "Kholusia", "Il Mheg", "The Rak'tika Greatwood", "Labyrinthos", "Thavnair", "Garlemald", "Azys Lla", "The Tempest", "Rhalgr's Reach"]
     let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
@@ -51,6 +52,11 @@ class MiningNodeScraper {
 
         let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllMiningNodes.json")
         try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
+
+        let missedNodesJson = try encoder.encode(missedNodes)
+        let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
+        let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodesMining.json")
+        try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
     }
     
     private func scrapeGatheringNodes(consoleGamesURL: URL, gamerEscapeURL: URL, testItem: String = "/wiki/Wind_Cluster") throws {
@@ -62,6 +68,7 @@ class MiningNodeScraper {
         // get item name
         guard let h1 = try consoleGamesDocument.select("#firstHeading").first() else {
             print("unable to find firstHeading in consoleGameDocument")
+            missedNodes.append(testItem)
             return
         }
         let itemName = try h1.text()
@@ -72,6 +79,7 @@ class MiningNodeScraper {
               let divCG3 = divCG2.children().first(),
               let blockquoteCG1 = try divCG3.nextElementSibling() else {
                   print("unable to get divs or blockquote lines 52 - 55")
+                  missedNodes.append(testItem)
                   return
               }
         var itemDescription = try blockquoteCG1.text()
@@ -106,6 +114,7 @@ class MiningNodeScraper {
               let tbodyGE3 = trGE3.children().first()?.children().first()?.children().first()
         else {
             print("unable to get element in lines 71 - 88")
+            missedNodes.append(testItem)
             return
         }
         
@@ -130,7 +139,7 @@ class MiningNodeScraper {
         // get gathering location elements
         var itemLocationInfo: [NodeLocationInfo] = []
         for gatheringSource in ["Quarrying", "Mining"] {
-            guard let spanGE1 = try gamerEscapeDocument.select("#\(gatheringSource)").first() else { print("line 116"); continue }
+            guard let spanGE1 = try gamerEscapeDocument.select("#\(gatheringSource)").first() else { continue }
             guard let divGE5 = spanGE1.parent(),
                   let thGE1 = divGE5.parent(),
                   let trGE4 = thGE1.parent(),
@@ -138,6 +147,7 @@ class MiningNodeScraper {
                   let tbodyGE4 = tableGE3.children().first()
             else {
                 print("unable to get element in lines 119 - 123")
+                missedNodes.append(testItem)
                 return
             }
             
