@@ -33,7 +33,7 @@ If you have any questions or need additional help with running this project, ema
 Contributors names and contact info
 
 Christopher DeVito 
-[email: christopher.devito@protonmail.com](christopher.devito@protonmail.com)
+[email: christopher.devito@protonmail.com](mailto:christopher.devito@protonmail.com)
 
 ## Version History
 
