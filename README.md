@@ -40,10 +40,6 @@ Christopher DeVito
 * 1.0
     * Initial Release
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details
-
 ## Acknowledgments
 
 Scraping Libray with documentation.
