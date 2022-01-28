@@ -26,7 +26,7 @@ FF14-Scraper is a web scraper that uses SwiftSoup to get the HTML from consolega
 
 ## Help
 
-If you have any questions or need additional help with running this project, email me here
+If you have any questions or need additional help with running this project, email me [here](christopher.devito@protonmail.com).
 
 ## Authors
 
@@ -37,7 +37,7 @@ Christopher DeVito
 
 ## Version History
 
-* 0.1
+* 1.0
     * Initial Release
 
 ## License
