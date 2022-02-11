@@ -22,6 +22,7 @@ let fishingCollectiblesScraper = FishingCollectiblesScraper()
 let botanyNodeScraper = BotanyNodeScraper()
 let miningNodeScraper = MiningNodeScraper()
 let fishingNodeScraper = FishingNodeScraper()
+let fetchImagesScraper = FetchImagesScraper()
 
 
 // MARK: - Scraper calls
@@ -36,6 +37,7 @@ let fishingNodeScraper = FishingNodeScraper()
 //try miningNodesScraper.scrapeMiningNodesWiki()
 //try fishingNodesScraper.scrapeFishingNodesWiki()
 //try fishingCollectiblesScraper.scrapeFishingCollectiblesWiki()
-try botanyNodeScraper.scrapeGatheringNodesWiki()
+//try botanyNodeScraper.scrapeGatheringNodesWiki()
 //try miningNodeScraper.scrapeGatheringNodesWiki()
 //try fishingNodeScraper.scrapeGatheringNodesWiki()
+fetchImagesScraper.fetchFromJSONFile()
