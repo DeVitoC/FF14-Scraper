@@ -11,14 +11,14 @@ import CoreGraphics
 import CoreImage
 
 class FetchImagesScraper {
-    var nodes: [GatheringNode] = []
+    var nodes: [FishingNode] = []
     var missedNodes: [URL] = []
     let fm = FileManager.default
     lazy var path: URL = {
         let path = fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
         return path
     }()
-    let fileName = "AllBotanyNodes.json"
+    let fileName = "AllFishingNodes.json"
     let saveFilePath = "ff14Images/JPG"
 
     func fetchFromJSONFile() {
@@ -34,7 +34,7 @@ class FetchImagesScraper {
         // Decode JSON
         do {
             let data = Data(jsonData)
-            nodes = try decoder.decode([GatheringNode].self, from: data)
+            nodes = try decoder.decode([FishingNode].self, from: data)
         } catch let error {
             NSLog("\(error)")
         }
@@ -48,7 +48,7 @@ class FetchImagesScraper {
         }
     }
 
-    private func fetchImageFromURL(node: GatheringNode) {
+    private func fetchImageFromURL(node: FishingNode) {
         let baseURL = URL(string: "https://ffxiv.gamerescape.com")!
         let url = baseURL.appendingPathComponent(node.img)
         var imageLocation: String? = nil

@@ -23,6 +23,7 @@ let botanyNodeScraper = BotanyNodeScraper()
 let miningNodeScraper = MiningNodeScraper()
 let fishingNodeScraper = FishingNodeScraper()
 let fetchImagesScraper = FetchImagesScraper()
+let updateExpac = UpdateExpac()
 
 
 // MARK: - Scraper calls
@@ -40,4 +41,5 @@ let fetchImagesScraper = FetchImagesScraper()
 //try botanyNodeScraper.scrapeGatheringNodesWiki()
 //try miningNodeScraper.scrapeGatheringNodesWiki()
 //try fishingNodeScraper.scrapeGatheringNodesWiki()
-fetchImagesScraper.fetchFromJSONFile()
+//fetchImagesScraper.fetchFromJSONFile()
+try updateExpac.fixExpacData()
