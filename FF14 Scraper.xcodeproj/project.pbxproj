@@ -29,6 +29,7 @@
 		E2A4204A27B5B56000451200 /* FetchImagesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A4204927B5B56000451200 /* FetchImagesScraper.swift */; };
 		E2A801D2277C011A002A18AC /* MiningNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */; };
 		E2A801D4277C1948002A18AC /* FishingNodeScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */; };
+		E2BFFA0427B7021A00F29691 /* UpdateExpac.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BFFA0327B7021A00F29691 /* UpdateExpac.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +67,7 @@
 		E2A4204927B5B56000451200 /* FetchImagesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImagesScraper.swift; sourceTree = "<group>"; };
 		E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningNodeScraper.swift; sourceTree = "<group>"; };
 		E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodeScraper.swift; sourceTree = "<group>"; };
+		E2BFFA0327B7021A00F29691 /* UpdateExpac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateExpac.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */,
 				E208F0032799FFF600DE3AF1 /* FishingNodeLocationInfo.swift */,
 				E2A4204927B5B56000451200 /* FetchImagesScraper.swift */,
+				E2BFFA0327B7021A00F29691 /* UpdateExpac.swift */,
 			);
 			path = "FF14 Scraper";
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				E20FD2C2276111340044CA36 /* main.swift in Sources */,
 				E2A1CEB0277175840054D60D /* FishingCollectiblesScraper.swift in Sources */,
 				E20FD2D02761126B0044CA36 /* FishingNode.swift in Sources */,
+				E2BFFA0427B7021A00F29691 /* UpdateExpac.swift in Sources */,
 				E20FD2D2276112B80044CA36 /* Region.swift in Sources */,
 				E20FD2D6276118C40044CA36 /* BotanyNodesFolkloreScraper.swift in Sources */,
 				E2A1CEAE277041180054D60D /* FishingNodesScraper.swift in Sources */,
