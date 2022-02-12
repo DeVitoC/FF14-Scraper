@@ -8,7 +8,7 @@
 import Foundation
 
 struct GatheringNode: Node {
-    let name: String
+    var name: String
     let time: Int?
     let location: String
     let img: String
@@ -19,6 +19,6 @@ struct GatheringNode: Node {
     let stars: Int
     let x: Int
     let y: Int
-    let expac: Int
+    var expac: Int
     let gathering: Int
 }
