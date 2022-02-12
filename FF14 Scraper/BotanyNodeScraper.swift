@@ -114,9 +114,11 @@ class BotanyNodeScraper {
             return
         }
 
+        // TODO: Fix expac
         // MARK: Get Expac
         var patchText = try expacNumberDiv.text().components(separatedBy: " ")[1]
-        patchText
+        patchText = patchText.replacingOccurrences(of: "a", with: "").replacingOccurrences(of: "b", with: "")
+        print(patchText)
         guard let patchNumber = Float(patchText)
         else {
             print("Failed to convert patch number on line 118")
@@ -163,7 +165,7 @@ class BotanyNodeScraper {
             // Get section for specific gathering source
             guard let gatheringSourceSpan = try gamerEscapeDocument.select("#\(gatheringSource)").first()
             else {
-                print("line 162: \(itemName)");
+                print("line 162: \(itemName)")
                 continue
             }
 
