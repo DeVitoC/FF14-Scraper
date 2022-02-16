@@ -1,13 +1,13 @@
 //
-//  UpdateExpac.swift
+//  UpdateFishingDescription.swift
 //  FF14 Scraper
 //
-//  Created by Christopher DeVito on 2/11/22.
+//  Created by Christopher DeVito on 2/15/22.
 //
 
 import Foundation
 
-class UpdateExpac {
+class UpdateFishingDescription {
     private var finalNodes: [FishingNode] = []
     private var nodesToModify: [FishingNode] = []
     private var listToCheck: [String] = []
@@ -21,7 +21,7 @@ class UpdateExpac {
     func fixExpacData() throws {
         getNodes()
         print(nodesToModify.count)
-        fixExpacNumber()
+        fixDescription()
         print(finalNodes.count)
         try encodeAndSave()
     }
@@ -46,23 +46,24 @@ class UpdateExpac {
         }
     }
 
-    private func fixExpacNumber() {
+    private func fixDescription() {
         for node in nodesToModify {
             var newNode = node
-            switch node.location {
-            case "Limsa Lominsa Upper Decks", "Limsa Lominsa Lower Decks", "Lower La Noscea", "Middle La Noscea", "Eastern La Noscea", "Western La Noscea", "Outer La Noscea", "Upper La Noscea", "Mist", "Wolves' Den", "New Gridania", "Old Gridania", "Central Shroud", "North Shroud", "East Shroud", "South Shroud", "Lavender Beds", "Central Thanalan", "Western Thanalan", "Eastern Thanalan", "Southern Thanalan", "Northern Thanalan", "The Goblet", "Manderville Gold Saucer", "Coerthas Central Highlands", "Mor Dhona":
-                newNode.expac = 0
-            case "Coerthas Western Highlands", "Dravanian Forelands", "Dravanian Hinterlands", "The Churning Mists", "The Sea of Clouds", "Floating Continent", "Idyllshire", "Azys Lla", "The Dravanian Hinterlands", "The Dravanian Forelands":
-                newNode.expac = 1
-            case "Rhalgr's Reach", "The Fringes", "The Peaks", "The Lochs", "The Azim Steppe", "The Ruby Sea", "Yanxia", "The Doman Enclave", "Kugane", "Shirogane":
-                newNode.expac = 2
-            case "Eulmore", "The Crystarium", "Rak'tika", "Amh Araeng", "Il Mheg", "Kholusia", "Lakeland", "The Tempest", "The Rak'tika Greatwood":
-                newNode.expac = 3
-            case "Old Sharlayan", "Radz-at-Han", "Labyrinthos", "Thavnair", "Garlemald", "Mare Lamentorum", "Elpis", "Ultima Thule", "Empyreum":
-                newNode.expac = 4
-            default:
-                listToCheck.append(newNode.name)
+            var description = node.description
+            var openBracktIndices: [String.Index] = []
+
+            for (index, char) in description.enumerated() {
+                if char == "[" {
+                    let prevIndex = description.index(description.startIndex, offsetBy: index - 1)
+                    openBracktIndices.append(prevIndex)
+                }
             }
+
+            for index in openBracktIndices {
+                description.insert(contentsOf: "\n\n", at: index)
+            }
+
+            newNode.description = description
             finalNodes.append(newNode)
         }
     }

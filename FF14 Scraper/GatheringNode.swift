@@ -12,7 +12,7 @@ struct GatheringNode: Node {
     let time: Int?
     let location: String
     let img: String
-    let description: String
+    var description: String
     let type: String
     let source: String
     let lvl: Int

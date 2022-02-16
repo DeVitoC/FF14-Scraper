@@ -12,7 +12,7 @@ protocol Node: Codable {
     var time: Int? { get }
     var location: String { get }
     var img: String { get }
-    var description: String { get }
+    var description: String { get set }
     var type: String { get }
     var source: String { get }
     var lvl: Int { get }
