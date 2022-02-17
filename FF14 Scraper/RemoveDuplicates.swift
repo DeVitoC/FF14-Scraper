@@ -1,13 +1,13 @@
 //
-//  UpdateFishingDescription.swift
+//  RemoveDuplicates.swift
 //  FF14 Scraper
 //
-//  Created by Christopher DeVito on 2/15/22.
+//  Created by Christopher DeVito on 2/16/22.
 //
 
 import Foundation
 
-class UpdateFishingDescription {
+class RemoveDuplicates {
     private var finalNodes: [FishingNode] = []
     private var nodesToModify: [FishingNode] = []
     private var listToCheck: [String] = []
@@ -18,10 +18,10 @@ class UpdateFishingDescription {
     }()
     private let fileName = "AllFishingNodes.json"
 
-    func fixFishDesc() throws {
+    func fixDuplicates() throws {
         getNodes()
         print(nodesToModify.count)
-        fixDescription()
+        removeDuplicates()
         print(finalNodes.count)
         try encodeAndSave()
     }
@@ -46,26 +46,32 @@ class UpdateFishingDescription {
         }
     }
 
-    private func fixDescription() {
+    private func removeDuplicates() {
+        var nodeDict: [String: [FishingNode]] = [:]
         for node in nodesToModify {
-            var newNode = node
-            var description = node.description
-            var openBracktIndices: [String.Index] = []
-
-            for (index, char) in description.enumerated() {
-                if char == "[" {
-                    let prevIndex = description.index(description.startIndex, offsetBy: index)
-                    openBracktIndices.append(prevIndex)
+            if let entries = nodeDict[node.name] {
+                var isInDict = false
+                for entry in entries {
+                    if node.name == entry.name &&
+                        node.time == entry.time &&
+                        node.location == entry.location &&
+                        node.x == entry.x &&
+                        node.y == entry.y {
+                        isInDict = true
+                    }
                 }
+                if !isInDict {
+                    nodeDict[node.name]?.append(node)
+                }
+            } else {
+                nodeDict[node.name] = [node]
             }
-            openBracktIndices.reverse()
+        }
 
-            for index in openBracktIndices {
-                description.insert(contentsOf: "\n\n", at: index)
+        for entry in nodeDict {
+            for node in entry.value {
+                finalNodes.append(node)
             }
-
-            newNode.description = description
-            finalNodes.append(newNode)
         }
     }
 
