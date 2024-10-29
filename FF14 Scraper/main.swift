@@ -17,8 +17,8 @@ import SwiftSoup
 //let botanyNodeScraper = BotanyNodeScraper() // updated 10-28-2024
 
 // Mining Scrapers
-//let miningNodesFolkloreScraper = MiningNodeFolkloreScraper()
 //let miningNodesScraper = MiningNodesScraper() // updated 10-29-2024
+let miningNodesFolkloreScraper = MiningNodeFolkloreScraper()
 //let miningNodeUnspoiledScraper = MiningNodeUnspoiledScraper()
 //let miningNodeScraper = MiningNodeScraper()
 //let miningNodesEphemeralScraper = MiningEphemeralNodesScraper()
@@ -45,8 +45,8 @@ import SwiftSoup
 //try botanyNodesUnspoiledScraper.scrapeBotanyNodesWiki()
 //try botanynodesEphermeralScraper.scrapeBotanyNodesWiki()
 //try botanyNodeScraper.scrapeGatheringNodesWiki()
-//try miningNodesFolkloreScraper.scrapeMiningNodesWiki()
 //try miningNodesScraper.scrapeMiningNodesWiki()
+try miningNodesFolkloreScraper.scrapeMiningNodesWiki()
 //try miningNodeUnspoiledScraper.scrapeMiningNodesWiki()
 //try miningNodesEphemeralScraper.scrapeMiningNodesWiki()
 //try miningNodeScraper.scrapeGatheringNodesWiki()

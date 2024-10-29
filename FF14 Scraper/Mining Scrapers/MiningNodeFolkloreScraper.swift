@@ -32,37 +32,47 @@ class MiningNodeFolkloreScraper {
         let html = try String(contentsOf: url)
         let document = try SwiftSoup.parse(html)
 
-        guard let span = try document.select("#Miner").first(),
+        guard let span = try document.select("#Botanist").first(),
               let h2 = span.parent(),
-              let table = try h2.nextElementSibling(),
-              let tbody = table.children().first() else { print( "no span found"); return [:] }
-        
-        var element = tbody
+              let parserDiv = h2.parent()
+        else { print( "Unable to find table sections"); return [:] }
 
         var nodeNames: [String: String] = [:]
 
-        for sibling in element.children() {
-//            guard let sibling = try element.nextElementSibling() else { break }
-            for child in sibling.children() {
-                switch child.tagName() {
-                case "hr":
-                    // We know the first hr comes after the end of the table
-                    return nodeNames
-                case "td":
-                    // This is the table entry with our information
-                    guard let a = child.children().first() else { continue }
-                    guard let name = try? a.text() else { continue }
-                    let href = try a.attr("href")
-                    if locations.contains(name) || nodeTypes.contains(name) {
-                        continue
+        mainLoop: for section in parserDiv.children() {
+            let sectionTag = section.tagName()
+
+            switch sectionTag {
+                case "h2", "hr":
+                    if try section.text() != "Botanist" {
+                        break mainLoop
                     }
-                    nodeNames[name] = href
+                case "table":
+                    guard let tBody = section.children().first()
+                    else { continue }
+
+                    for tr in tBody.children() {
+                        if tr.children().first()?.tagName() == "th" {
+                            continue
+                        }
+
+                        let trChildren = tr.children()
+                        guard trChildren.count > 3 else { continue }
+                        let itemTD = trChildren[2]
+                        let itemText = try itemTD.text().trimmingCharacters(in: .whitespaces)
+
+                        guard let span = itemTD.children().first(),
+                              let a = try span.nextElementSibling()
+                        else { continue }
+
+                        let itemHref = try a.attr("href")
+                        nodeNames[itemText] = itemHref
+                    }
                 default:
                     continue
-                }
             }
-            element = sibling
         }
+
         return nodeNames
     }
 }
