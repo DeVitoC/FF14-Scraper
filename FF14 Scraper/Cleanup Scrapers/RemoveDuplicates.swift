@@ -20,9 +20,7 @@ class RemoveDuplicates {
 
     func fixDuplicates() throws {
         getNodes()
-        print(nodesToModify.count)
         removeDuplicates()
-        print(finalNodes.count)
         try encodeAndSave()
     }
 
@@ -35,12 +33,10 @@ class RemoveDuplicates {
             print("Failed to get JSON data from file")
             return
         }
-        print("got data")
         // Decode JSON
         do {
             let data = Data(jsonData)
             nodesToModify = try decoder.decode([GatheringNode].self, from: data)
-            print(nodesToModify.count)
         } catch let error {
             NSLog("\(error)")
         }

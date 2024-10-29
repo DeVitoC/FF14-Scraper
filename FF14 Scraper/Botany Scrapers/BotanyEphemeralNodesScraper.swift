@@ -8,7 +8,7 @@
 import Foundation
 import SwiftSoup
 
-class EphemeralNodesScraper {
+class BotanyEphemeralNodesScraper {
     var nodes: [String: String] = [:]
     typealias BotanyNodeDictionary = [String: GatheringNode]
     let nodeTypes = ["Mature Tree", "Lush Vegetation Patch"]
@@ -30,31 +30,38 @@ class EphemeralNodesScraper {
     private func scrapeBotanyNodes(url: URL) throws -> [String: String] {
         let html = try String(contentsOf: url)
         let document = try SwiftSoup.parse(html)
-        
-        guard let span = try document.select("#Shadowbringers").first(),
-              let h2 = span.parent(),
-              let topLevel = h2.parent() else { return [:] }
-        let tables = topLevel.children().filter({ $0.tagName() == "table" })
-        
+
+        let botanySpans = try document.select("span[id^='Botanist']")
+
         var nodeNames: [String: String] = [:]
-        
-        for table in tables {
-            guard try table.previousElementSibling()?.children().first()?.text() != "Reduction Table" else { continue }
-            guard let tbody = table.children().first() else { continue }
-            for tr in tbody.children() {
-                for tableItem in tr.children() {
-                    if tableItem.tagName() == "th" {
-                        continue
-                    }
-                    guard !tableItem.children().isEmpty() else { continue }
-                    for div in tableItem.children() {
-                        guard try div.previousElementSibling()?.tagName() == "div" else { continue }
-                        guard let name = try? div.text() else { continue }
-                        let href = try div.attr("href")
-                        if locations.contains(name) || nodeTypes.contains(name) || name.contains("Aethersand") || name.contains("Crystal") {
+
+        for span in botanySpans {
+            guard let botanyH3 = span.parent(),
+                  let table = try botanyH3.nextElementSibling(),
+                  let tBody = table.children().first()
+            else { continue }
+
+            for tr in tBody.children() {
+                if tr.children().first()?.tagName() == "th" {
+                    continue
+                }
+
+                let trChildren = tr.children()
+                guard trChildren.count > 5 else { continue }
+                let itemTD = trChildren[4]
+
+                guard let itemsP = itemTD.children().first() else { continue }
+
+                for element in itemsP.children() {
+                    switch element.tagName() {
+                        case "a":
+                            let itemText = try element.text().trimmingCharacters(in: .whitespaces)
+                            if itemText.isEmpty { continue }
+
+                            let itemHref = try element.attr("href")
+                            nodeNames[itemText] = itemHref
+                        default:
                             continue
-                        }
-                        nodeNames[name] = href
                     }
                 }
             }

@@ -68,9 +68,7 @@ class FetchImagesScraper {
         let imageLocationURL = baseURL.appendingPathComponent(imageLocation)
 
         DispatchQueue.global().async {
-            print("inside")
             if let image = CIImage(contentsOf: imageLocationURL) {
-                print("image is valid")
                     self.saveImageToDisk(image: image, name: node.name)
             } else {
                 print("failing")
@@ -78,7 +76,6 @@ class FetchImagesScraper {
         }
         sleep(3)
 
-        print("outside")
         return
     }
 
@@ -90,7 +87,6 @@ class FetchImagesScraper {
         }
         let strippedName = name.replacingOccurrences(of: " ", with: "")
         let path = path.appendingPathComponent(saveFilePath, isDirectory: true).appendingPathComponent(strippedName).appendingPathExtension("jpg")
-        print(path)
         let context = CIContext()
 
         do {

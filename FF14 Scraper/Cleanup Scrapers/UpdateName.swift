@@ -38,7 +38,6 @@ class UpdateName {
         do {
             let data = Data(jsonData)
             nodesToModify = try decoder.decode([FishingNode].self, from: data)
-            print(nodesToModify.count)
         } catch let error {
             NSLog("\(error)")
         }

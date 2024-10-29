@@ -11,16 +11,17 @@ import SwiftSoup
 // MARK: - Scraper Objects
 // Botany Scrapers
 //let botanyNodesScraper = BotanyNodesScraper() // updated 10-28-2024
+//let botanyNodesFolkloreScraper = BotanyNodeFolkloreScraper() // updated 10-28-2024
+//let botanyNodesUnspoiledScraper = BotanyNodeUnspoiledScraper() // working 10-28-2024
+//let botanynodesEphermeralScraper = BotanyEphemeralNodesScraper() // updated 10-28-2024
 //let botanyNodeScraper = BotanyNodeScraper() // updated 10-28-2024
-let botanyNodesFolkloreScraper = BotanyNodeFolkloreScraper()
-//let botanyNodesUnspoiledScraper = BotanyNodeUnspoiledScraper()
-//let botanynodesEphermeralScraper = EphemeralNodesScraper()
 
 // Mining Scrapers
-//let miningNodesScraper = MiningNodesScraper()
-//let miningNodeScraper = MiningNodeScraper()
+let miningNodesScraper = MiningNodesScraper()
 //let miningNodesFolkloreScraper = MiningNodeFolkloreScraper()
 //let miningNodeUnspoiledScraper = MiningNodeUnspoiledScraper()
+//let miningNodeScraper = MiningNodeScraper()
+//let miningNodesEphemeralScraper = MiningEphemeralNodesScraper()
 
 // Fishing Scrapers
 //let fishingNodesScraper = FishingNodesScraper()
@@ -40,17 +41,18 @@ let botanyNodesFolkloreScraper = BotanyNodeFolkloreScraper()
 // MARK: - Scraper calls
 // Uncomment call to run that scraper
 //try botanyNodesScraper.scrapeBotanyNodesWiki()
-//try botanyNodeScraper.scrapeGatheringNodesWiki()
-try botanyNodesFolkloreScraper.scrapeBotanyNodesWiki()
+//try botanyNodesFolkloreScraper.scrapeBotanyNodesWiki()
 //try botanyNodesUnspoiledScraper.scrapeBotanyNodesWiki()
 //try botanynodesEphermeralScraper.scrapeBotanyNodesWiki()
+//try botanyNodeScraper.scrapeGatheringNodesWiki()
+try miningNodesScraper.scrapeMiningNodesWiki()
 //try miningNodesFolkloreScraper.scrapeMiningNodesWiki()
-//try fishingNodesFolkloreScraper.scrapeFishingNodesWiki()
 //try miningNodeUnspoiledScraper.scrapeMiningNodesWiki()
-//try miningNodesScraper.scrapeMiningNodesWiki()
+//try miningNodesEphemeralScraper.scrapeMiningNodesWiki()
+//try miningNodeScraper.scrapeGatheringNodesWiki()
+//try fishingNodesFolkloreScraper.scrapeFishingNodesWiki()
 //try fishingNodesScraper.scrapeFishingNodesWiki()
 //try fishingCollectiblesScraper.scrapeFishingCollectiblesWiki()
-//try miningNodeScraper.scrapeGatheringNodesWiki()
 //try fishingNodeScraper.scrapeGatheringNodesWiki()
 //fetchImagesScraper.fetchFromJSONFile()
 //try updateExpac.fixExpacData()

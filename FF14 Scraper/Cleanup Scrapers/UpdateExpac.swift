@@ -20,9 +20,7 @@ class UpdateExpac {
 
     func fixExpacData() throws {
         getNodes()
-        print(nodesToModify.count)
         fixExpacNumber()
-        print(finalNodes.count)
         try encodeAndSave()
     }
 
@@ -35,7 +33,6 @@ class UpdateExpac {
             print("Failed to get JSON data from file")
             return
         }
-        print("got data")
         // Decode JSON
         do {
             let data = Data(jsonData)

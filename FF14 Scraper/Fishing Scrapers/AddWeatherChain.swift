@@ -20,9 +20,7 @@ class AddWeatherChain {
 
     func fixWeather() throws {
         getNodes()
-        print(nodesToModify.count)
         addWeatherChainBool()
-        print(finalNodes.count)
         try encodeAndSave()
     }
 
@@ -35,12 +33,10 @@ class AddWeatherChain {
             print("Failed to get JSON data from file")
             return
         }
-        print("got data")
         // Decode JSON
         do {
             let data = Data(jsonData)
             nodesToModify = try decoder.decode([FishingNode].self, from: data)
-            print(nodesToModify.count)
         } catch let error {
             NSLog("\(error)")
         }

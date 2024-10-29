@@ -20,9 +20,7 @@ class UpdateFishingDescription {
 
     func fixFishDesc() throws {
         getNodes()
-        print(nodesToModify.count)
         fixDescription()
-        print(finalNodes.count)
         try encodeAndSave()
     }
 
@@ -35,12 +33,10 @@ class UpdateFishingDescription {
             print("Failed to get JSON data from file")
             return
         }
-        print("got data")
         // Decode JSON
         do {
             let data = Data(jsonData)
             nodesToModify = try decoder.decode([FishingNode].self, from: data)
-            print(nodesToModify.count)
         } catch let error {
             NSLog("\(error)")
         }

@@ -67,7 +67,6 @@ class FishingNodeScraper {
         let gamerEscapeDocument = try SwiftSoup.parse(gamerEscapeHTML)
 
         let itemName = testItem.replacingOccurrences(of: "/wiki/", with: "")
-        print(itemName)
 
         // Get item elements
         guard let divGE1 = try gamerEscapeDocument.select("#mw-content-text").first(),
@@ -134,8 +133,7 @@ class FishingNodeScraper {
         }
         let descriptionTR2 = descriptionTbody.children()[2]
         let itemDescription = try descriptionTR2.text()
-        print(itemDescription)
-        
+
         // assign item values
         let itemImgUrl = try aGE1.attr("href")
         let patchText = try divGE3.text().components(separatedBy: " ")[1]
@@ -176,7 +174,6 @@ class FishingNodeScraper {
         var itemStars: Int = 0
         for element in headerTbodyGE1.children() {
             if try element.children().first()?.text().contains("Level") != false {
-                print(try element.children()[0].text())
                 let levelText = try element.children()[0].text().components(separatedBy: ": ")
                 if levelText.count > 1 {
                     let level = levelText[1]
@@ -200,8 +197,6 @@ class FishingNodeScraper {
             else {
                 continue
             }
-//            print(baitTbody)
-            print()
 
             // get location for this node
             guard let locationAHREF = locationLineTD.children().first()
