@@ -272,7 +272,6 @@ class MiningNodeScraper {
 
         for itemLocation in itemLocationInfo {
             let gatheringItem = GatheringNode(name: itemName, time: itemLocation.time, location: itemLocation.location, img: itemImgUrl, description: itemDescription, type: itemType, lvl: itemLvl, stars: itemLocation.stars, x: itemLocation.x, y: itemLocation.y, expac: itemExpac)
-            print(gatheringItem)
             nodes.append(gatheringItem)
         }
     }

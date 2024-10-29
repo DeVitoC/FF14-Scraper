@@ -15,7 +15,7 @@ class MiningNodesScraper {
     let locations = locationStrings
     
     func scrapeMiningNodesWiki() throws {
-        let miningNodesURL = URL(string: "https://ffxiv.consolegameswiki.com/wiki/Mining_Node_Locations")!
+        let miningNodesURL = URL(string: "https://ffxiv.consolegameswiki.com/wiki/Miner_Node_Locations")!
         let miningNodes = try scrapeMiningNodes(url: miningNodesURL)
         
         let encoder = JSONEncoder()
@@ -30,29 +30,46 @@ class MiningNodesScraper {
     private func scrapeMiningNodes(url: URL) throws -> [String: String] {
         let html = try String(contentsOf: url)
         let document = try SwiftSoup.parse(html)
-        
+
+
         guard let div = try document.select("#mw-content-text").first(),
-              let divChild = div.children().first(),
-              let hr = try divChild.children().first()?.nextElementSibling(),
-              let table = try hr.nextElementSibling(),
-              let tbody = table.children().first() else { return [:] }
-        let tbodyChildren = tbody.children()
+              let parserDiv = div.children().first(),
+              let dividerHR = try parserDiv.children().first()?.nextElementSibling(),
+              let table = try dividerHR.nextElementSibling(),
+              let tBody = table.children().first(),
+              let tableRow = tBody.children().first()
+        else { return [:] }
+
+
+        var element = tableRow
+
         var nodeNames: [String: String] = [:]
-        
-        for tr in tbodyChildren {
-            for child in tr.children() {
-                if child.tagName() == "th" {
-                    continue
-                }
-                for tableEntry in child.children() {
-                    guard let name = try? tableEntry.text() else { continue }
-                    let href = try tableEntry.attr("href")
-                    if locations.contains(name) || nodeTypes.contains(name) {
-                        continue
+
+        while true {
+            guard let sibling = try element.nextElementSibling() else { break }
+            switch sibling.tagName() {
+                case "hr":
+                    // We know the first hr comes after the end of the table
+                    return nodeNames
+                case "tr":
+                    // This is the table entry with our information
+                    let siblingChildren = sibling.children()
+
+                    for tableEntry in siblingChildren {
+                        let nodeEntries = tableEntry.children()
+                        for entry in nodeEntries {
+                            guard let name = try? entry.text() else { continue }
+                            let href = try entry.attr("href")
+                            if locations.contains(name) || nodeTypes.contains(name) {
+                                continue
+                            }
+                            nodeNames[name] = href
+                        }
                     }
-                    nodeNames[name] = href
-                }
+                default:
+                    break
             }
+            element = sibling
         }
         return nodeNames
     }
