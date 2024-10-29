@@ -12,7 +12,7 @@ class FishingNodesScraper {
     var nodes: [String: String] = [:]
     typealias FishingNodeDictionary = [String: FishingNode]
     let bait = ["Pill Bug", "Lugworm", "Bloodworm", "Crayfish Ball", "Butterworm", "Crow Fly", "Rat Tail", "Midge Basket", "Spinnerbait", "Crab Ball", "Floating Minnow", "Spoon Worm", "Sinking Minnow", "Goby Ball", "Northern Krill", "Yumizuno", "Glowworm", "Krill Cage Feeder", "Steel Jig", "Heavy Steel Jig", "Bass Ball", "Moth Pupa", "Brass Spoon Lure", "Saltwater Boilie", "Mythril Spoon Lure", "Syrphid Basket", "Freshwater Boilie", "Sand Gecko", "Sand Leech", "Chocobo Fly", "Stem Borer", "Topwater Frog", "Hoverworm"]
-    let locations = ["Limsa Lominsa Upper Decks", "Limsa Lominsa Lower Decks", "Eastern La Noscea", "Lower La Noscea", "Middle La Noscea", "Upper La Noscea", "Western La Noscea", "Outer La Noscea", "New Gridania", "Old Gridania", "Central Shroud", "East Shroud", "North Shroud", "South Shroud", "Central Thanalan", "Eastern Thanalan", "Northern Thanalan", "Southern Thanalan", "Western Thanalan", "The Lavender Beds", "Coerthas Central Highlands", "Coerthas Western Highlands", "Mor Dhona", "Mists", "Labender Beds", "The Dravanian Forelands", "The Dravanian Hinterlands", "The Churning Mists", "The Sea of Clouds", "The Fringes", "The Peaks", "The Ruby Sea", "The Azim Steppe", "Yanxia", "The Lochs", "Amh Araeng", "Lakeland", "Kholusia", "Il Mheg", "The Rak'tika Greatwood", "Labyrinthos", "Thavnair", "Garlemald", "Azys Lla", "The Tempest", "Rhalgr's Reach"]
+    let locations = locationStrings
     
     func scrapeFishingNodesWiki() throws {
         let FishingNodesURL = URL(string: "https://ffxiv.consolegameswiki.com/wiki/Fishing_Locations")!

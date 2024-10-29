@@ -12,7 +12,7 @@ class FishingNodeScraper {
     private var nodesToSearch: [String: String] = [:]
     private var nodes: [FishingNode] = []
     private var missedNodes: [String] = []
-    private let locations = ["Limsa Lominsa Upper Decks", "Limsa Lominsa Lower Decks", "Eastern La Noscea", "Lower La Noscea", "Middle La Noscea", "Upper La Noscea", "Western La Noscea", "Outer La Noscea", "New Gridania", "Old Gridania", "Central Shroud", "East Shroud", "North Shroud", "South Shroud", "Central Thanalan", "Eastern Thanalan", "Northern Thanalan", "Southern Thanalan", "Western Thanalan", "The Lavender Beds", "Coerthas Central Highlands", "Coerthas Western Highlands", "Mor Dhona", "Mists", "Labender Beds", "The Dravanian Forelands", "The Dravanian Hinterlands", "The Churning Mists", "The Sea of Clouds", "The Fringes", "The Peaks", "The Ruby Sea", "The Azim Steppe", "Yanxia", "The Lochs", "Amh Araeng", "Lakeland", "Kholusia", "Il Mheg", "The Rak'tika Greatwood", "Labyrinthos", "Thavnair", "Garlemald", "Azys Lla", "The Tempest", "Rhalgr's Reach"]
+    private let locations = locationStrings
     private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
     
     func scrapeGatheringNodesWiki() throws {
@@ -364,7 +364,7 @@ class FishingNodeScraper {
 
         for itemLocation in itemLocationInfo {
             guard let itemLocation = itemLocation as? FishingNodeLocationInfo else { continue }
-            let fishingItem = FishingNode(name: itemName, time: itemLocation.time, duration: itemLocation.duration, location: itemLocation.location, img: itemImgUrl, description: itemDescription, type: itemType, source: itemLocation.source, lvl: itemLvl, stars: itemStars, x: itemLocation.x, y: itemLocation.y, expac: itemExpac, desynthLvl: itemLvl, desynthJob: itemDesynth, mooch: itemLocation.mooch, moochFrom: itemLocation.bait, weather: itemLocation.weather, waterType: itemLocation.waterType, gathering: 0)
+            let fishingItem = FishingNode(name: itemName, time: itemLocation.time, duration: itemLocation.duration, location: itemLocation.location, img: itemImgUrl, description: itemDescription, type: itemType, source: itemLocation.source, lvl: itemLvl, stars: itemStars, x: itemLocation.x, y: itemLocation.y, expac: itemExpac, desynthLvl: itemLvl, desynthJob: itemDesynth, mooch: itemLocation.mooch, moochFrom: itemLocation.bait, weather: itemLocation.weather, waterType: itemLocation.waterType)
             nodes.append(fishingItem)
         }
     }

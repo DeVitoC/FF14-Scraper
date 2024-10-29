@@ -29,5 +29,4 @@ struct FishingNodeWC: Node {
     let weather: [String] // if is a weather chain, this is the weather(s) the fish is actually available in
     let weatherChain: [String] // the weather leading up to the weather
     let waterType: String
-    let gathering: Int
 }

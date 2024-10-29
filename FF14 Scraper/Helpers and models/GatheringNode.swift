@@ -14,11 +14,9 @@ struct GatheringNode: Node {
     let img: String
     var description: String
     let type: String
-    let source: String
     let lvl: Int
     let stars: Int
     let x: Int
     let y: Int
     var expac: Int
-    let gathering: Int
 }

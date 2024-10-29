@@ -66,7 +66,7 @@ class AddWeatherChain {
                 weather = node.weather
             }
 
-            let newFishingNode = FishingNodeWC(name: node.name, time: node.time, duration: node.duration, location: node.location, img: node.img, description: node.description, type: node.type, source: node.source, lvl: node.lvl, stars: node.stars, x: node.x, y: node.y, expac: node.expac, desynthLvl: node.desynthLvl, desynthJob: node.desynthJob, mooch: node.mooch, moochFrom: node.moochFrom, isWeatherChain: isWeatherChain, weather: weather, weatherChain: weatherChain, waterType: node.waterType, gathering: node.gathering)
+            let newFishingNode = FishingNodeWC(name: node.name, time: node.time, duration: node.duration, location: node.location, img: node.img, description: node.description, type: node.type, source: node.source, lvl: node.lvl, stars: node.stars, x: node.x, y: node.y, expac: node.expac, desynthLvl: node.desynthLvl, desynthJob: node.desynthJob, mooch: node.mooch, moochFrom: node.moochFrom, isWeatherChain: isWeatherChain, weather: weather, weatherChain: weatherChain, waterType: node.waterType)
             finalNodes.append(newFishingNode)
         }
     }

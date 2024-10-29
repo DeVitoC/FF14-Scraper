@@ -27,7 +27,6 @@ struct FishingNode: Node {
     let moochFrom: [String]
     let weather: [String]
     let waterType: String
-    let gathering: Int
 }
 
 enum Weather: String {

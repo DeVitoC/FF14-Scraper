@@ -12,11 +12,12 @@ class BotanyNodesScraper {
     var nodes: [String: String] = [:]
     typealias BotanyNodeDictionary = [String: GatheringNode]
     let nodeTypes = ["Mature Tree", "Lush Vegetation Patch"]
-    let locations = ["Limsa Lominsa Upper Decks", "Limsa Lominsa Lower Decks", "Eastern La Noscea", "Lower La Noscea", "Middle La Noscea", "Upper La Noscea", "Western La Noscea", "Outer La Noscea", "New Gridania", "Old Gridania", "Central Shroud", "East Shroud", "North Shroud", "South Shroud", "Central Thanalan", "Eastern Thanalan", "Northern Thanalan", "Southern Thanalan", "Western Thanalan", "The Lavender Beds", "Coerthas Central Highlands", "Coerthas Western Highlands", "Mor Dhona", "Mists", "Labender Beds", "The Dravanian Forelands", "The Dravanian Hinterlands", "The Churning Mists", "The Sea of Clouds", "The Fringes", "The Peaks", "The Ruby Sea", "The Azim Steppe", "Yanxia", "The Lochs", "Amh Araeng", "Lakeland", "Kholusia", "Il Mheg", "The Rak'tika Greatwood", "Labyrinthos", "Thavnair", "Garlemald", "Azys Lla", "The Tempest", "Rhalgr's Reach"]
+    let locations = locationStrings
 
     func scrapeBotanyNodesWiki() throws {
         let botanistNodesURL = URL(string: "https://ffxiv.consolegameswiki.com/wiki/Botanist_Node_Locations")!
         let botanyNodes = try scrapeBotanyNodes(url: botanistNodesURL)
+        print(botanyNodes)
 
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
@@ -30,7 +31,8 @@ class BotanyNodesScraper {
     private func scrapeBotanyNodes(url: URL) throws -> [String: String] {
         let html = try String(contentsOf: url)
         let document = try SwiftSoup.parse(html)
-                
+
+
         guard let div = try document.select("#mw-content-text").first(),
                 let divChild = div.children().first(),
                 let divGrandchild = try divChild.children().first()?.nextElementSibling(),
@@ -50,7 +52,7 @@ class BotanyNodesScraper {
             case "tr":
                 // This is the table entry with our information
                 let siblingChildren = sibling.children()
-                
+
                 for tableEntry in siblingChildren {
                     print()
                     let nodeEntries = tableEntry.children()

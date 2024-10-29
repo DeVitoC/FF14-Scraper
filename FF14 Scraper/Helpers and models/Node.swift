@@ -14,13 +14,11 @@ protocol Node: Codable {
     var img: String { get }
     var description: String { get set }
     var type: String { get }
-    var source: String { get }
     var lvl: Int { get }
     var stars: Int { get }
     var x: Int { get }
     var y: Int { get }
     var expac: Int { get set }
-    var gathering: Int { get }
 }
 
 enum Profession: String {
