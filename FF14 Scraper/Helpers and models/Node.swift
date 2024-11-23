@@ -8,6 +8,7 @@
 import Foundation
 
 protocol Node: Codable {
+    var id: Int {get}
     var name: String { get set }
     var time: Int? { get }
     var location: String { get }

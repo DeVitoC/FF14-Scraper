@@ -8,6 +8,7 @@
 import Foundation
 
 struct FishingNodeWC: Node {
+    let id: Int
     var name: String
     let time: Int?
     let duration: Int

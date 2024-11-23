@@ -8,6 +8,7 @@
 import Foundation
 
 struct GatheringNode: Node {
+    let id: Int
     var name: String
     let time: Int?
     let location: String

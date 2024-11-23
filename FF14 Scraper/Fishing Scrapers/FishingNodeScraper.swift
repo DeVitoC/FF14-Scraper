@@ -205,21 +205,21 @@ class FishingNodeScraper {
 //                missedNodes.append(testItem)
                 continue
             }
-            var itemLocation = try locationAHREF.text()
+            let itemLocation = try locationAHREF.text()
 
             // get water type for this node
             guard let waterTypeTD = try locationLineTD.nextElementSibling()
             else {
                 continue
             }
-            var itemWaterType = try waterTypeTD.text()
+            let itemWaterType = try waterTypeTD.text()
             let itemSource = getFishingSource(for: itemWaterType)
 
             // get coords
-            guard let coordsAHREF = try locationAHREF.nextElementSibling()
-            else {
-                continue
-            }
+//            guard let coordsAHREF = try locationAHREF.nextElementSibling()
+//            else {
+//                continue
+//            }
 
             let locationLineText = try locationLineTD.text()
             var x: Int = 0, y: Int = 0
@@ -247,11 +247,11 @@ class FishingNodeScraper {
             }
 
             // get bait and mooch
-            guard let baitLineTR = baitTbody.children().first()
-            else {
-                continue
-            }
-            let baitText = (try? baitLineTR.text()) ?? ""
+//            guard let baitLineTR = baitTbody.children().first()
+//            else {
+//                continue
+//            }
+//            let baitText = (try? baitLineTR.text()) ?? ""
             var itemMooch = false
             var itemBait: [String] = []
             var itemTime: Int? = nil
@@ -359,7 +359,28 @@ class FishingNodeScraper {
 
         for itemLocation in itemLocationInfo {
             guard let itemLocation = itemLocation as? FishingNodeLocationInfo else { continue }
-            let fishingItem = FishingNode(name: itemName, time: itemLocation.time, duration: itemLocation.duration, location: itemLocation.location, img: itemImgUrl, description: itemDescription, type: itemType, source: itemLocation.source, lvl: itemLvl, stars: itemStars, x: itemLocation.x, y: itemLocation.y, expac: itemExpac, desynthLvl: itemLvl, desynthJob: itemDesynth, mooch: itemLocation.mooch, moochFrom: itemLocation.bait, weather: itemLocation.weather, waterType: itemLocation.waterType)
+            let fishingItem = FishingNode(
+                id: nodes.count,
+                name: itemName,
+                time: itemLocation.time,
+                duration: itemLocation.duration,
+                location: itemLocation.location,
+                img: itemImgUrl,
+                description: itemDescription,
+                type: itemType,
+                source: itemLocation.source,
+                lvl: itemLvl,
+                stars: itemStars,
+                x: itemLocation.x,
+                y: itemLocation.y,
+                expac: itemExpac,
+                desynthLvl: itemLvl,
+                desynthJob: itemDesynth,
+                mooch: itemLocation.mooch,
+                moochFrom: itemLocation.bait,
+                weather: itemLocation.weather,
+                waterType: itemLocation.waterType
+            )
             nodes.append(fishingItem)
         }
     }

@@ -12,7 +12,7 @@ class BotanyNodeScraper {
     private var nodesToSearch: [String: String] = [:]
     private var nodes: [GatheringNode] = []
     private var missedNodes: [String] = []
-    private typealias GatheringNodeDictionary = [String: GatheringNode]
+//    private typealias GatheringNodeDictionary = [String: GatheringNode]
     private let locations = locationStrings
     private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
 
@@ -387,6 +387,7 @@ class BotanyNodeScraper {
 
         for itemLocation in itemLocationInfo {
             let gatheringItem = GatheringNode(
+                id: nodes.count,
                 name: itemName,
                 time: itemLocation.time,
                 location: itemLocation.location,

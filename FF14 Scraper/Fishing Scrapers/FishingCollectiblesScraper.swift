@@ -32,7 +32,7 @@ class FishingCollectiblesScraper {
         let document = try SwiftSoup.parse(html)
         
         guard let div = try document.select("#mw-content-text").first(),
-              let divChild = try div.children().first() else { return [:] }
+              let divChild = div.children().first() else { return [:] }
         
         let divChildren = divChild.children()
         

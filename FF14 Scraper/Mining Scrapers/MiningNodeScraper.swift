@@ -170,7 +170,7 @@ class MiningNodeScraper {
             }
 
             // MARK: Get Gathering Source
-            let itemSource = gatheringSource
+//            let itemSource = gatheringSource
 
             // Get Element Table element for gathering Source
             guard let gatheringSourceParentDiv = gatheringSourceSpan.parent(),
@@ -271,7 +271,20 @@ class MiningNodeScraper {
         }
 
         for itemLocation in itemLocationInfo {
-            let gatheringItem = GatheringNode(name: itemName, time: itemLocation.time, location: itemLocation.location, img: itemImgUrl, description: itemDescription, type: itemType, lvl: itemLvl, stars: itemLocation.stars, x: itemLocation.x, y: itemLocation.y, expac: itemExpac)
+            let gatheringItem = GatheringNode(
+                id: nodes.count,
+                name: itemName,
+                time: itemLocation.time,
+                location: itemLocation.location,
+                img: itemImgUrl,
+                description: itemDescription,
+                type: itemType,
+                lvl: itemLvl,
+                stars: itemLocation.stars,
+                x: itemLocation.x,
+                y: itemLocation.y,
+                expac: itemExpac
+            )
             nodes.append(gatheringItem)
         }
     }
