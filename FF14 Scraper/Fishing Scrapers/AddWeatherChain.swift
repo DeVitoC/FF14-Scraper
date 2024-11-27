@@ -8,9 +8,6 @@
 import Foundation
 
 class AddWeatherChain {
-    private var finalNodes: [FishingNodeWC] = []
-    private var nodesToModify: [FishingNode] = []
-    private var listToCheck: [String] = []
     private let fm = FileManager.default
     private lazy var path: URL = {
         let path = fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
@@ -19,30 +16,33 @@ class AddWeatherChain {
     private let fileName = "AllFishingNodes.json"
 
     func fixWeather() throws {
-        getNodes()
-        addWeatherChainBool()
-        try encodeAndSave()
+        let nodesToModify = getNodes()
+        let finalNodes = addWeatherChainBool(nodesToModify: nodesToModify)
+        try encodeAndSave(finalNodes: finalNodes)
     }
 
-    private func getNodes() {
+    private func getNodes() -> [FishingNode] {
         let decoder = JSONDecoder()
 
         // Get JSON data
         guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(fileName).path)
         else {
             print("Failed to get JSON data from file")
-            return
+            return []
         }
         // Decode JSON
         do {
             let data = Data(jsonData)
-            nodesToModify = try decoder.decode([FishingNode].self, from: data)
+            let nodesToModify = try decoder.decode([FishingNode].self, from: data)
+            return nodesToModify
         } catch let error {
             NSLog("\(error)")
+            return []
         }
     }
 
-    private func addWeatherChainBool() {
+    private func addWeatherChainBool(nodesToModify: [FishingNode]) -> [FishingNodeWC] {
+        var finalNodes: [FishingNodeWC] = []
         for node in nodesToModify {
             var isWeatherChain: Bool
             var weatherChain: [String]
@@ -88,6 +88,7 @@ class AddWeatherChain {
             )
             finalNodes.append(newFishingNode)
         }
+        return finalNodes
     }
 
     private func splitWeatherChain(forChain weatherChain: String) -> (weatherChain: [String], weather: [String]) {
@@ -120,7 +121,7 @@ class AddWeatherChain {
         return (weatherChainTrimmed, weatherTrimmed)
     }
 
-    private func encodeAndSave() throws {
+    private func encodeAndSave(finalNodes: [FishingNodeWC]) throws {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let json = try encoder.encode(finalNodes)
@@ -128,10 +129,5 @@ class AddWeatherChain {
 
         let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllFishingNodes.json")
         try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
-
-        let missedNodesJson = try encoder.encode(listToCheck)
-        let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
-        let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/FishingNodesToCheck.json")
-        try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
     }
 }
