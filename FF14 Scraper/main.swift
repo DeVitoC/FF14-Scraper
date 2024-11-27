@@ -31,11 +31,11 @@ let miningNodesFolkloreScraper = MiningNodeFolkloreScraper()
 //let addWeatherChain = AddWeatherChain()
 
 // Misc scrapers
-//let removeDuplicates = RemoveDuplicates()
 //let updateName = UpdateName()
 //let updateFishingDescript = UpdateFishingDescription()
 let fetchImagesScraper = FetchImagesScraper() // updated 11-23-2024
 let updateExpac = UpdateExpac() // updated 11-23-2024
+//let removeDuplicates = RemoveDuplicates() // updated 11-26-2024
 
 
 // MARK: - Scraper calls
@@ -56,7 +56,7 @@ try miningNodesFolkloreScraper.scrapeMiningNodesWiki()
 //try fishingNodeScraper.scrapeGatheringNodesWiki()
 fetchImagesScraper.fetchAllImages()
 //try updateExpac.fixExpacData()
-//try updateName.fixExpacData()
+//try updateName.fixNames()
 //try updateFishingDescript.fixFishDesc()
 //try removeDuplicates.fixDuplicates()
 //try addWeatherChain.fixWeather()
