@@ -8,9 +8,6 @@
 import Foundation
 
 class UpdateFishingDescription {
-    private var finalNodes: [FishingNode] = []
-    private var nodesToModify: [FishingNode] = []
-    private var listToCheck: [String] = []
     private let fm = FileManager.default
     private lazy var path: URL = {
         let path = fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
@@ -19,30 +16,33 @@ class UpdateFishingDescription {
     private let fileName = "AllFishingNodes.json"
 
     func fixFishDesc() throws {
-        getNodes()
-        fixDescription()
-        try encodeAndSave()
+        let nodesToModify = getNodes()
+        let finalNodes = fixDescription(nodesToModify: nodesToModify)
+        try encodeAndSave(finalNodes: finalNodes)
     }
 
-    private func getNodes() {
+    private func getNodes() -> [FishingNode] {
         let decoder = JSONDecoder()
 
         // Get JSON data
         guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(fileName).path)
         else {
             print("Failed to get JSON data from file")
-            return
+            return []
         }
         // Decode JSON
         do {
             let data = Data(jsonData)
-            nodesToModify = try decoder.decode([FishingNode].self, from: data)
+            let nodesToModify = try decoder.decode([FishingNode].self, from: data)
+            return nodesToModify
         } catch let error {
             NSLog("\(error)")
+            return []
         }
     }
 
-    private func fixDescription() {
+    private func fixDescription(nodesToModify: [FishingNode]) -> [FishingNode] {
+        var finalNodes: [FishingNode] = []
         for node in nodesToModify {
             var newNode = node
             var description = node.description
@@ -63,9 +63,10 @@ class UpdateFishingDescription {
             newNode.description = description
             finalNodes.append(newNode)
         }
+        return finalNodes
     }
 
-    private func encodeAndSave() throws {
+    private func encodeAndSave(finalNodes: [FishingNode]) throws {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let json = try encoder.encode(finalNodes)
@@ -73,10 +74,5 @@ class UpdateFishingDescription {
 
         let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllFishingNodes.json")
         try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
-
-        let missedNodesJson = try encoder.encode(listToCheck)
-        let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
-        let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/FishingNodesToCheck.json")
-        try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
     }
 }

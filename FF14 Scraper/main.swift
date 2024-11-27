@@ -32,10 +32,10 @@ let miningNodesFolkloreScraper = MiningNodeFolkloreScraper()
 
 // Misc scrapers
 //let updateName = UpdateName()
-//let updateFishingDescript = UpdateFishingDescription()
 let fetchImagesScraper = FetchImagesScraper() // updated 11-23-2024
 let updateExpac = UpdateExpac() // updated 11-23-2024
 //let removeDuplicates = RemoveDuplicates() // updated 11-26-2024
+//let updateFishingDescript = UpdateFishingDescription() // updated 11-26-2024
 
 
 // MARK: - Scraper calls
