@@ -12,15 +12,14 @@ import SwiftSoup
 // General Scrapers
 //let folkloreNodesScraper = FolkloreNodesScraper() // updated 12-01-2024
 //let ephermeralNodesScraper = EphemeralNodesScraper() // updated 12-01-2024
+//let unspoiledNodesScraper = UnspoiledNodesScraper() // working 12-01-2024
 
 // Botany Scrapers
 //let botanyNodesScraper = BotanyNodesScraper() // updated 10-28-2024
-//let botanyNodesUnspoiledScraper = BotanyNodeUnspoiledScraper() // working 10-28-2024
 //let botanyNodeScraper = BotanyNodeScraper() // updated 10-28-2024
 
 // Mining Scrapers
 //let miningNodesScraper = MiningNodesScraper() // updated 10-29-2024
-//let miningNodeUnspoiledScraper = MiningNodeUnspoiledScraper()
 //let miningNodeScraper = MiningNodeScraper()
 
 // Fishing Scrapers
@@ -41,9 +40,9 @@ import SwiftSoup
 // Uncomment call to run that scraper
 //try folkloreNodesScraper.scrapeFolkloreNodesWiki()
 //try ephermeralNodesScraper.scrapeEphemeralNodesWiki()
+//try unspoiledNodesScraper.scrapeUnspoiledNodesWiki()
 
 //try botanyNodesScraper.scrapeBotanyNodesWiki()
-//try botanyNodesUnspoiledScraper.scrapeBotanyNodesWiki()
 //try botanyNodeScraper.scrapeGatheringNodesWiki()
 
 //try miningNodesScraper.scrapeMiningNodesWiki()
