@@ -10,8 +10,8 @@ import SwiftSoup
 
 // MARK: - Scraper Objects
 // General Scrapers
-//let folkloreNodesScraper = FolkloreNodesScraper() // updated 11-30-2024
-let ephermeralNodesScraper = EphemeralNodesScraper() // updated 12-01-2024
+//let folkloreNodesScraper = FolkloreNodesScraper() // updated 12-01-2024
+//let ephermeralNodesScraper = EphemeralNodesScraper() // updated 12-01-2024
 
 // Botany Scrapers
 //let botanyNodesScraper = BotanyNodesScraper() // updated 10-28-2024
@@ -40,7 +40,7 @@ let ephermeralNodesScraper = EphemeralNodesScraper() // updated 12-01-2024
 // MARK: - Scraper calls
 // Uncomment call to run that scraper
 //try folkloreNodesScraper.scrapeFolkloreNodesWiki()
-try ephermeralNodesScraper.scrapeEphemeralNodesWiki()
+//try ephermeralNodesScraper.scrapeEphemeralNodesWiki()
 
 //try botanyNodesScraper.scrapeBotanyNodesWiki()
 //try botanyNodesUnspoiledScraper.scrapeBotanyNodesWiki()

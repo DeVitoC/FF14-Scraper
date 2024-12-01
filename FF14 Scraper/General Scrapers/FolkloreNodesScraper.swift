@@ -14,8 +14,10 @@ class FolkloreNodesScraper {
 
     func scrapeFolkloreNodesWiki() throws {
         let nodesURL = URL(string: "https://ffxiv.consolegameswiki.com/wiki/Folklore_Nodes")!
+        let html = try String(contentsOf: nodesURL)
+        let document = try SwiftSoup.parse(html)
         for (index, sectionName) in sectionNames.enumerated() {
-            let nodes = try scrapeFolkloreNodes(url: nodesURL, section: sectionName)
+            let nodes = try scrapeFolkloreNodes(url: nodesURL, section: sectionName, document: document)
 
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
@@ -27,10 +29,7 @@ class FolkloreNodesScraper {
         }
     }
 
-    private func scrapeFolkloreNodes(url: URL, section: String) throws -> [String: String] {
-        let html = try String(contentsOf: url)
-        let document = try SwiftSoup.parse(html)
-
+    private func scrapeFolkloreNodes(url: URL, section: String, document: Document) throws -> [String: String] {
         guard let sectionSpan = try document.select("#\(section)").first(),
               let h2 = sectionSpan.parent()
         else { print( "Unable to find table sections"); return [:] }
