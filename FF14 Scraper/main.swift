@@ -10,18 +10,17 @@ import SwiftSoup
 
 // MARK: - Scraper Objects
 // General Scrapers
-let folkloreNodesScraper = FolkloreNodesScraper() // updated 11-30-2024
+//let folkloreNodesScraper = FolkloreNodesScraper() // updated 11-30-2024
+let ephermeralNodesScraper = EphemeralNodesScraper() // updated 12-01-2024
 
 // Botany Scrapers
 //let botanyNodesScraper = BotanyNodesScraper() // updated 10-28-2024
 //let botanyNodesUnspoiledScraper = BotanyNodeUnspoiledScraper() // working 10-28-2024
-//let botanynodesEphermeralScraper = BotanyEphemeralNodesScraper() // updated 10-28-2024
 //let botanyNodeScraper = BotanyNodeScraper() // updated 10-28-2024
 
 // Mining Scrapers
 //let miningNodesScraper = MiningNodesScraper() // updated 10-29-2024
 //let miningNodeUnspoiledScraper = MiningNodeUnspoiledScraper()
-//let miningNodesEphemeralScraper = MiningEphemeralNodesScraper()
 //let miningNodeScraper = MiningNodeScraper()
 
 // Fishing Scrapers
@@ -40,16 +39,15 @@ let folkloreNodesScraper = FolkloreNodesScraper() // updated 11-30-2024
 
 // MARK: - Scraper calls
 // Uncomment call to run that scraper
-try folkloreNodesScraper.scrapeFolkloreNodesWiki()
+//try folkloreNodesScraper.scrapeFolkloreNodesWiki()
+try ephermeralNodesScraper.scrapeEphemeralNodesWiki()
 
 //try botanyNodesScraper.scrapeBotanyNodesWiki()
 //try botanyNodesUnspoiledScraper.scrapeBotanyNodesWiki()
-//try botanynodesEphermeralScraper.scrapeBotanyNodesWiki()
 //try botanyNodeScraper.scrapeGatheringNodesWiki()
 
 //try miningNodesScraper.scrapeMiningNodesWiki()
 //try miningNodeUnspoiledScraper.scrapeMiningNodesWiki()
-//try miningNodesEphemeralScraper.scrapeMiningNodesWiki()
 //try miningNodeScraper.scrapeGatheringNodesWiki()
 
 //try fishingNodesScraper.scrapeFishingNodesWiki()

@@ -16,11 +16,10 @@
 		E20FD2D2276112B80044CA36 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20FD2D1276112B80044CA36 /* Region.swift */; };
 		E20FD2D4276115220044CA36 /* BotanyNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20FD2D3276115220044CA36 /* BotanyNodesScraper.swift */; };
 		E20FD2D8276119220044CA36 /* BotanyNodesUnspoiledScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20FD2D7276119220044CA36 /* BotanyNodesUnspoiledScraper.swift */; };
-		E20FD2DA2761197D0044CA36 /* BotanyEphemeralNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20FD2D92761197D0044CA36 /* BotanyEphemeralNodesScraper.swift */; };
+		E20FD2DA2761197D0044CA36 /* EphemeralNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20FD2D92761197D0044CA36 /* EphemeralNodesScraper.swift */; };
 		E22415B027BE182C008093C7 /* AddWeatherChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22415AF27BE182C008093C7 /* AddWeatherChain.swift */; };
 		E22415B227BE1843008093C7 /* FishingNodeWC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22415B127BE1843008093C7 /* FishingNodeWC.swift */; };
 		E22C07442CD012D900CADBDC /* locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22C07432CD012D400CADBDC /* locations.swift */; };
-		E22C074C2CD1528A00CADBDC /* MiningEphemeralNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E22C074B2CD1528A00CADBDC /* MiningEphemeralNodesScraper.swift */; };
 		E291976827BC2D2F0032F7C7 /* UpdateName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E291976727BC2D2F0032F7C7 /* UpdateName.swift */; };
 		E291976A27BC2DD00032F7C7 /* UpdateFishingDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */; };
 		E2A1CEA6276F08E80054D60D /* FolkloreNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEA5276F08E80054D60D /* FolkloreNodesScraper.swift */; };
@@ -59,11 +58,10 @@
 		E20FD2D1276112B80044CA36 /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		E20FD2D3276115220044CA36 /* BotanyNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotanyNodesScraper.swift; sourceTree = "<group>"; };
 		E20FD2D7276119220044CA36 /* BotanyNodesUnspoiledScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotanyNodesUnspoiledScraper.swift; sourceTree = "<group>"; };
-		E20FD2D92761197D0044CA36 /* BotanyEphemeralNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotanyEphemeralNodesScraper.swift; sourceTree = "<group>"; };
+		E20FD2D92761197D0044CA36 /* EphemeralNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EphemeralNodesScraper.swift; sourceTree = "<group>"; };
 		E22415AF27BE182C008093C7 /* AddWeatherChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWeatherChain.swift; sourceTree = "<group>"; };
 		E22415B127BE1843008093C7 /* FishingNodeWC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodeWC.swift; sourceTree = "<group>"; };
 		E22C07432CD012D400CADBDC /* locations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = locations.swift; sourceTree = "<group>"; };
-		E22C074B2CD1528A00CADBDC /* MiningEphemeralNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningEphemeralNodesScraper.swift; sourceTree = "<group>"; };
 		E291976727BC2D2F0032F7C7 /* UpdateName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateName.swift; sourceTree = "<group>"; };
 		E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFishingDescription.swift; sourceTree = "<group>"; };
 		E2A1CEA5276F08E80054D60D /* FolkloreNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolkloreNodesScraper.swift; sourceTree = "<group>"; };
@@ -143,7 +141,6 @@
 				E20FD2D3276115220044CA36 /* BotanyNodesScraper.swift */,
 				E2A1CEB12772C8DD0054D60D /* BotanyNodeScraper.swift */,
 				E20FD2D7276119220044CA36 /* BotanyNodesUnspoiledScraper.swift */,
-				E20FD2D92761197D0044CA36 /* BotanyEphemeralNodesScraper.swift */,
 			);
 			path = "Botany Scrapers";
 			sourceTree = "<group>";
@@ -154,7 +151,6 @@
 				E2A1CEAB276F0F5A0054D60D /* MiningNodesScraper.swift */,
 				E2A801D1277C011A002A18AC /* MiningNodeScraper.swift */,
 				E2A1CEA9276F0DA90054D60D /* MiningNodesUnspoiledScraper.swift */,
-				E22C074B2CD1528A00CADBDC /* MiningEphemeralNodesScraper.swift */,
 			);
 			path = "Mining Scrapers";
 			sourceTree = "<group>";
@@ -166,6 +162,7 @@
 				E2A1CEAF277175840054D60D /* FishingCollectiblesScraper.swift */,
 				E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */,
 				E22415AF27BE182C008093C7 /* AddWeatherChain.swift */,
+				E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */,
 			);
 			path = "Fishing Scrapers";
 			sourceTree = "<group>";
@@ -176,7 +173,6 @@
 				E2A4204927B5B56000451200 /* FetchImagesScraper.swift */,
 				E2BFFA0327B7021A00F29691 /* UpdateExpac.swift */,
 				E291976727BC2D2F0032F7C7 /* UpdateName.swift */,
-				E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */,
 				E2C96E2527BD55C90071A71E /* RemoveDuplicates.swift */,
 			);
 			path = "Cleanup Scrapers";
@@ -186,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				E2A1CEA5276F08E80054D60D /* FolkloreNodesScraper.swift */,
+				E20FD2D92761197D0044CA36 /* EphemeralNodesScraper.swift */,
 			);
 			path = "General Scrapers";
 			sourceTree = "<group>";
@@ -260,7 +257,6 @@
 				E2A801D4277C1948002A18AC /* FishingNodeScraper.swift in Sources */,
 				E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */,
 				E2A1CEA6276F08E80054D60D /* FolkloreNodesScraper.swift in Sources */,
-				E22C074C2CD1528A00CADBDC /* MiningEphemeralNodesScraper.swift in Sources */,
 				E22415B027BE182C008093C7 /* AddWeatherChain.swift in Sources */,
 				E20FD2CE2761122A0044CA36 /* GatheringNode.swift in Sources */,
 				E2A1CEAC276F0F5A0054D60D /* MiningNodesScraper.swift in Sources */,
@@ -268,7 +264,7 @@
 				E2A1CEB22772C8DD0054D60D /* BotanyNodeScraper.swift in Sources */,
 				E2C96E2627BD55C90071A71E /* RemoveDuplicates.swift in Sources */,
 				E20FD2D4276115220044CA36 /* BotanyNodesScraper.swift in Sources */,
-				E20FD2DA2761197D0044CA36 /* BotanyEphemeralNodesScraper.swift in Sources */,
+				E20FD2DA2761197D0044CA36 /* EphemeralNodesScraper.swift in Sources */,
 				E208F0042799FFF600DE3AF1 /* FishingNodeLocationInfo.swift in Sources */,
 				E20FD2C2276111340044CA36 /* main.swift in Sources */,
 				E2A1CEB0277175840054D60D /* FishingCollectiblesScraper.swift in Sources */,
