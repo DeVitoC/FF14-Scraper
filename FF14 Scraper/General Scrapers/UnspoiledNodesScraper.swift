@@ -46,7 +46,6 @@ class UnspoiledNodesScraper {
             switch currentTag {
                 case "h2":
                     let itemText = try currentElement.text().trimmingCharacters(in: .whitespaces)
-                    print("itemText: ", itemText)
                     if itemText != section {
                         break mainLoop
                     }

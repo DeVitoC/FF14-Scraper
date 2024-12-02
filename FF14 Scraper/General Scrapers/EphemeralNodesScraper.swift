@@ -33,7 +33,6 @@ class EphemeralNodesScraper {
     private func scrapeEphemeralNodes(url: URL, section: String, document: Document) throws -> [String: String] {
         let sectionSpans = try document.select("span[id^='\(section)']")
 
-        print("\(section) sections: ", sectionSpans.count)
         var nodeNames: [String: String] = [:]
 
         for span in sectionSpans {
