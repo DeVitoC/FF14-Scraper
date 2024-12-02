@@ -23,7 +23,6 @@
 		E291976827BC2D2F0032F7C7 /* UpdateName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E291976727BC2D2F0032F7C7 /* UpdateName.swift */; };
 		E291976A27BC2DD00032F7C7 /* UpdateFishingDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */; };
 		E2A1CEA6276F08E80054D60D /* FolkloreNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEA5276F08E80054D60D /* FolkloreNodesScraper.swift */; };
-		E2A1CEAC276F0F5A0054D60D /* MiningNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAB276F0F5A0054D60D /* MiningNodesScraper.swift */; };
 		E2A1CEAE277041180054D60D /* FishingNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */; };
 		E2A1CEB0277175840054D60D /* CollectablesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAF277175840054D60D /* CollectablesScraper.swift */; };
 		E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */; };
@@ -63,7 +62,6 @@
 		E291976727BC2D2F0032F7C7 /* UpdateName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateName.swift; sourceTree = "<group>"; };
 		E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFishingDescription.swift; sourceTree = "<group>"; };
 		E2A1CEA5276F08E80054D60D /* FolkloreNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolkloreNodesScraper.swift; sourceTree = "<group>"; };
-		E2A1CEAB276F0F5A0054D60D /* MiningNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiningNodesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEAF277175840054D60D /* CollectablesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectablesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeLocationInfo.swift; sourceTree = "<group>"; };
@@ -108,8 +106,6 @@
 				E20FD2C1276111340044CA36 /* main.swift */,
 				E2C8B1402CFBD883002E91F7 /* General Scrapers */,
 				E22C07452CD01C8600CADBDC /* Helpers and models */,
-				E22C07472CD01CC300CADBDC /* Botany Scrapers */,
-				E22C07482CD01CF700CADBDC /* Mining Scrapers */,
 				E22C07492CD01D0C00CADBDC /* Fishing Scrapers */,
 				E22C074A2CD01E2A00CADBDC /* Cleanup Scrapers */,
 			);
@@ -129,22 +125,6 @@
 				E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */,
 			);
 			path = "Helpers and models";
-			sourceTree = "<group>";
-		};
-		E22C07472CD01CC300CADBDC /* Botany Scrapers */ = {
-			isa = PBXGroup;
-			children = (
-				E20FD2D3276115220044CA36 /* NormalNodesScraper.swift */,
-			);
-			path = "Botany Scrapers";
-			sourceTree = "<group>";
-		};
-		E22C07482CD01CF700CADBDC /* Mining Scrapers */ = {
-			isa = PBXGroup;
-			children = (
-				E2A1CEAB276F0F5A0054D60D /* MiningNodesScraper.swift */,
-			);
-			path = "Mining Scrapers";
 			sourceTree = "<group>";
 		};
 		E22C07492CD01D0C00CADBDC /* Fishing Scrapers */ = {
@@ -177,6 +157,7 @@
 				E20FD2D7276119220044CA36 /* UnspoiledNodesScraper.swift */,
 				E2A1CEAF277175840054D60D /* CollectablesScraper.swift */,
 				E2A801D1277C011A002A18AC /* GatheringNodeScraper.swift */,
+				E20FD2D3276115220044CA36 /* NormalNodesScraper.swift */,
 			);
 			path = "General Scrapers";
 			sourceTree = "<group>";
@@ -253,7 +234,6 @@
 				E2A1CEA6276F08E80054D60D /* FolkloreNodesScraper.swift in Sources */,
 				E22415B027BE182C008093C7 /* AddWeatherChain.swift in Sources */,
 				E20FD2CE2761122A0044CA36 /* GatheringNode.swift in Sources */,
-				E2A1CEAC276F0F5A0054D60D /* MiningNodesScraper.swift in Sources */,
 				E2C96E2627BD55C90071A71E /* RemoveDuplicates.swift in Sources */,
 				E20FD2D4276115220044CA36 /* NormalNodesScraper.swift in Sources */,
 				E20FD2DA2761197D0044CA36 /* EphemeralNodesScraper.swift in Sources */,
