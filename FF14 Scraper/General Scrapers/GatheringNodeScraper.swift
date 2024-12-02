@@ -2,86 +2,103 @@
 //  GatheringNodeScraper.swift
 //  FF14 Scraper
 //
-//  Created by Christopher Devito on 12/21/21.
+//  Created by Christopher Devito on 12/28/21.
 //
 
 import Foundation
 import SwiftSoup
 
-class BotanyNodeScraper {
-    private var nodesToSearch: [String: String] = [:]
-    private var nodes: [GatheringNode] = []
-    private var missedNodes: [String] = []
-//    private typealias GatheringNodeDictionary = [String: GatheringNode]
-    private let locations = locationStrings
-    private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
+class GatheringNodeScraper {
+    var nodes: [GatheringNode] = []
+    var missedNodes: [String] = []
+    let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
+    let sectionNames = ["Botany", "Mining"]
 
     func scrapeGatheringNodesWiki() throws {
-        guard let gamerEscapeWikiURL = URL(string: "https://ffxiv.consolegameswiki.com")
+        guard let consoleGamesWikiUrl = URL(string: "https://ffxiv.consolegameswiki.com")
         else { return }
-        let testing = true
+
+        let testing = false
         if testing {
-            guard let item = "/wiki/Rarefied_Windsbalm_Bay_Leaf".removingPercentEncoding else { print("failed to format item"); return }
-            try scrapeGatheringNodes(consoleGamerUrl: gamerEscapeWikiURL, item: item)
+            guard let item = "/wiki/Radiant_Astral_Moraine".removingPercentEncoding
+            else {
+                print("failed to format item")
+                return
+            }
+            do {
+                try scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiUrl, item: item, section: "Mining")
+            } catch {
+                print("error: ", error)
+            }
+
+            print(nodes)
         } else {
             let fm = FileManager.default
             lazy var path: URL = {
                 fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
             }()
-            let filenames = ["botanyNodesNormal.json", "botanyNodesUnspoiled.json", "botanyNodesFolklore.json"]
 
-            for filename in filenames {
-                let jsonDecoder = JSONDecoder()
+            for sectionName in sectionNames {
+                let filenames = ["\(sectionName)NodesFolklore.json", "Ephemeral\(sectionName)Nodes.json", "\(sectionName)NodesUnspoiled.json", "\(sectionName)CollectiblesNormal.json", "\(sectionName)NodesNormal.json"]
 
-                // Get JSON
-                guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(filename).path) else { return }
+                nodes.removeAll()
+                missedNodes.removeAll()
 
-                // decode JSON
-                do {
-                    let data = Data(jsonData)
-                    let itemNames = try jsonDecoder.decode([String: String].self, from: data)
-                    for (_, address) in itemNames {
-                        guard let item = address.removingPercentEncoding else {
-                            print("failed to format item")
-                            missedNodes.append(address)
-                            return
+                for filename in filenames {
+                    let jsonDecoder = JSONDecoder()
+
+                    // Get JSON
+                    guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(filename).path) else { return }
+
+                    // decode JSON
+                    do {
+                        let data = Data(jsonData)
+                        let itemNames = try jsonDecoder.decode([String: String].self, from: data)
+                        for (_, address) in itemNames {
+                            guard let item = address.removingPercentEncoding else {
+                                print("failed to format item")
+                                missedNodes.append(address)
+                                return
+                            }
+                            try scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiUrl, item: item, section: sectionName)
+                            let seconds = 2.0
+                            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {}
                         }
-                        try scrapeGatheringNodes(consoleGamerUrl: gamerEscapeWikiURL, item: item)
-                        let seconds = 2.0
-                        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {}
+                    } catch let error {
+                        NSLog("\(error)")
                     }
-                } catch let error {
-                    NSLog("\(error)")
                 }
+
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .prettyPrinted
+                let json = try encoder.encode(nodes)
+                let jsonString = String(decoding: json, as: UTF8.self)
+
+                let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/All\(sectionName)Nodes.json")
+                try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
+
+                let missedNodesJson = try encoder.encode(missedNodes)
+                let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
+                let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodes\(sectionName).json")
+                try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
             }
 
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            let json = try encoder.encode(nodes)
-            let jsonString = String(decoding: json, as: UTF8.self)
-
-            let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllBotanyNodes.json")
-            try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
-
-            let missedNodesJson = try encoder.encode(missedNodes)
-            let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
-            let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodesBotany.json")
-            try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
         }
+
     }
 
-    private func scrapeGatheringNodes(consoleGamerUrl: URL, item: String) throws {
+    private func scrapeGatheringNodes(consoleGamesURL: URL, item: String, section: String) throws {
         // scrape GamerEscape wiki
-        let gamerEscapeWikiItemURL = consoleGamerUrl.appendingPathComponent(item)
-        let gamerEscapeHTML = try String(contentsOf: gamerEscapeWikiItemURL)
-        let gamerEscapeDocument = try SwiftSoup.parse(gamerEscapeHTML)
+        let consoleGamesWikiItemURL = consoleGamesURL.appendingPathComponent(item)
+        let consoleGamesHTML = try String(contentsOf: consoleGamesWikiItemURL)
+        let document = try SwiftSoup.parse(consoleGamesHTML)
 
         // Get main content and the top table/info panel
-        guard let contentTextDiv = try gamerEscapeDocument.select("#mw-content-text").first(),
+        guard let contentTextDiv = try? document.select("#mw-content-text").first(),
               let parserDiv = contentTextDiv.children().first(),
               var infoBoxDiv = parserDiv.children().first()
         else {
-            print("unable to get elements lines 74-76")
+            print("unable to get elements lines 88-90")
             missedNodes.append(item)
             return
         }
@@ -89,10 +106,10 @@ class BotanyNodeScraper {
             infoBoxDiv = try infoBoxDiv.nextElementSibling()!
         }
 
-        guard let iconSpanDiv = try infoBoxDiv.children().first()?.nextElementSibling(),
-              let nameP = try iconSpanDiv.nextElementSibling()
+        guard let iconSpanDiv = try? infoBoxDiv.children().first()?.nextElementSibling(),
+              let nameP = try? iconSpanDiv.nextElementSibling()
         else {
-            print("unable to get element in lines 86 - 87: main content and top info panel")
+            print("unable to get element in lines xx - xx: main content and top info panel")
             missedNodes.append(item)
             return
         }
@@ -162,7 +179,6 @@ class BotanyNodeScraper {
         }
         let itemDescription = try desctiptionP.text()
 
-
         // MARK: Get Table information
         guard let aquisitionH2 = try blockQuote.nextElementSibling(),
               let gatheringH3 = try aquisitionH2.nextElementSibling(),
@@ -177,17 +193,20 @@ class BotanyNodeScraper {
         var itemLvl: Int?
         var itemLocationInfo: [NodeLocationInfo] = []
 
-        if element.tagName() == "h3", try element.nextElementSibling()?.tagName() == "table" {
+        if element.tagName() == "h3",
+           try element.nextElementSibling()?.tagName() == "table" {
             element = try element.nextElementSibling()!
         }
-        print(element)
 
         switch element.tagName() {
             case "table":
-                if let previousElement = try element.previousElementSibling(), let nextElement = try element.nextElementSibling() {
+                if let previousElement = try element.previousElementSibling(),
+                   let nextElement = try element.nextElementSibling() {
                     let previousText = try previousElement.text()
                     let nextText = try nextElement.text()
-                    if previousText != "Gathering", nextText == "Gathering", let nextTable = try nextElement.nextElementSibling() {
+                    if previousText != "Gathering",
+                       nextText == "Gathering",
+                       let nextTable = try nextElement.nextElementSibling() {
                         element = nextTable
                     }
                 }
@@ -205,7 +224,7 @@ class BotanyNodeScraper {
                     return
                 }
 
-                var foundBotanistRow = false
+                var foundSectionRow = false
                 rowLoop: for row in tableBody.children() {
                     // Ignore the header row and get "a" tag for first item of first row
                     guard let column1Test = row.children().first(),
@@ -213,10 +232,10 @@ class BotanyNodeScraper {
                           let column1A1Test = column1Div1Test.children().first()
                     else { continue }
 
-                    // Check if row is for Botany, otherwise continue to next row
+                    // Check if row is for current section, otherwise continue to next row
                     let a1TitleTest = try column1A1Test.attr("title")
-                    if !a1TitleTest.contains("Botanist") {continue}
-                    foundBotanistRow = true
+                    if !a1TitleTest.contains(section == "Botany" ? "Botanist" : "Miner") {continue}
+                    foundSectionRow = true
 
                     var stars: Int = 0
                     var itemLocation: String = ""
@@ -224,7 +243,7 @@ class BotanyNodeScraper {
                     var x: Int = 0
                     var y: Int = 0
 
-                    // If row is a Botany row, get information
+                    // If row is this section row, get information
                     for (index, column) in row.children().enumerated() {
                         if column.tagName() == "th" {continue}
                         switch index {
@@ -311,8 +330,8 @@ class BotanyNodeScraper {
                     }
                 }
 
-                if foundBotanistRow == false {
-                    print("no valid bonanist info")
+                if foundSectionRow == false {
+                    print("no valid section row info")
                     return
                 }
                 if itemLocationInfo.isEmpty {
@@ -377,7 +396,6 @@ class BotanyNodeScraper {
                 return
         }
 
-
         // Verify itemLvl is not nil. Otherwise count this as a missed node
         guard let itemLvl else {
             print("itemLvl is nil in line 280")
@@ -400,6 +418,7 @@ class BotanyNodeScraper {
                 y: itemLocation.y,
                 expac: itemExpac
             )
+
             nodes.append(gatheringItem)
         }
     }
