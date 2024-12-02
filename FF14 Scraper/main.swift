@@ -12,7 +12,8 @@ import SwiftSoup
 // General Scrapers
 //let folkloreNodesScraper = FolkloreNodesScraper() // updated 12-01-2024
 //let ephermeralNodesScraper = EphemeralNodesScraper() // updated 12-01-2024
-//let unspoiledNodesScraper = UnspoiledNodesScraper() // working 12-01-2024
+//let unspoiledNodesScraper = UnspoiledNodesScraper() // updated 12-01-2024
+//let collectiblesScraper = CollectablesScraper() // updated 12-01-2024
 
 // Botany Scrapers
 //let botanyNodesScraper = BotanyNodesScraper() // updated 10-28-2024
@@ -20,11 +21,10 @@ import SwiftSoup
 
 // Mining Scrapers
 //let miningNodesScraper = MiningNodesScraper() // updated 10-29-2024
-//let miningNodeScraper = MiningNodeScraper()
+let miningNodeScraper = MiningNodeScraper()
 
 // Fishing Scrapers
 //let fishingNodesScraper = FishingNodesScraper()
-//let fishingCollectiblesScraper = FishingCollectiblesScraper()
 //let fishingNodeScraper = FishingNodeScraper()
 //let addWeatherChain = AddWeatherChain() // updated 11-26-2024
 
@@ -41,16 +41,16 @@ import SwiftSoup
 //try folkloreNodesScraper.scrapeFolkloreNodesWiki()
 //try ephermeralNodesScraper.scrapeEphemeralNodesWiki()
 //try unspoiledNodesScraper.scrapeUnspoiledNodesWiki()
+//try collectiblesScraper.scrapeCollectiblesWiki()
 
 //try botanyNodesScraper.scrapeBotanyNodesWiki()
 //try botanyNodeScraper.scrapeGatheringNodesWiki()
 
 //try miningNodesScraper.scrapeMiningNodesWiki()
 //try miningNodeUnspoiledScraper.scrapeMiningNodesWiki()
-//try miningNodeScraper.scrapeGatheringNodesWiki()
+try miningNodeScraper.scrapeGatheringNodesWiki()
 
 //try fishingNodesScraper.scrapeFishingNodesWiki()
-//try fishingCollectiblesScraper.scrapeFishingCollectiblesWiki()
 //try fishingNodeScraper.scrapeGatheringNodesWiki()
 
 //fetchImagesScraper.fetchAllImages()
