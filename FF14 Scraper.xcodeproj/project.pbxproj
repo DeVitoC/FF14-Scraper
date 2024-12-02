@@ -23,7 +23,6 @@
 		E291976827BC2D2F0032F7C7 /* UpdateName.swift in Sources */ = {isa = PBXBuildFile; fileRef = E291976727BC2D2F0032F7C7 /* UpdateName.swift */; };
 		E291976A27BC2DD00032F7C7 /* UpdateFishingDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */; };
 		E2A1CEA6276F08E80054D60D /* FolkloreNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEA5276F08E80054D60D /* FolkloreNodesScraper.swift */; };
-		E2A1CEAE277041180054D60D /* FishingNodesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */; };
 		E2A1CEB0277175840054D60D /* CollectablesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEAF277175840054D60D /* CollectablesScraper.swift */; };
 		E2A1CEB42778DBFD0054D60D /* NodeLocationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */; };
 		E2A4204A27B5B56000451200 /* FetchImagesScraper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A4204927B5B56000451200 /* FetchImagesScraper.swift */; };
@@ -62,7 +61,6 @@
 		E291976727BC2D2F0032F7C7 /* UpdateName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateName.swift; sourceTree = "<group>"; };
 		E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFishingDescription.swift; sourceTree = "<group>"; };
 		E2A1CEA5276F08E80054D60D /* FolkloreNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolkloreNodesScraper.swift; sourceTree = "<group>"; };
-		E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishingNodesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEAF277175840054D60D /* CollectablesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectablesScraper.swift; sourceTree = "<group>"; };
 		E2A1CEB32778DBFD0054D60D /* NodeLocationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeLocationInfo.swift; sourceTree = "<group>"; };
 		E2A4204927B5B56000451200 /* FetchImagesScraper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImagesScraper.swift; sourceTree = "<group>"; };
@@ -130,7 +128,6 @@
 		E22C07492CD01D0C00CADBDC /* Fishing Scrapers */ = {
 			isa = PBXGroup;
 			children = (
-				E2A1CEAD277041180054D60D /* FishingNodesScraper.swift */,
 				E2A801D3277C1948002A18AC /* FishingNodeScraper.swift */,
 				E22415AF27BE182C008093C7 /* AddWeatherChain.swift */,
 				E291976927BC2DD00032F7C7 /* UpdateFishingDescription.swift */,
@@ -246,7 +243,6 @@
 				E2BFFA0427B7021A00F29691 /* UpdateExpac.swift in Sources */,
 				E22415B227BE1843008093C7 /* FishingNodeWC.swift in Sources */,
 				E20FD2D2276112B80044CA36 /* Region.swift in Sources */,
-				E2A1CEAE277041180054D60D /* FishingNodesScraper.swift in Sources */,
 				E20FD2CC276111C00044CA36 /* Node.swift in Sources */,
 				E20FD2D8276119220044CA36 /* UnspoiledNodesScraper.swift in Sources */,
 			);

@@ -15,11 +15,9 @@ import SwiftSoup
 //let unspoiledNodesScraper = UnspoiledNodesScraper() // updated 12-01-2024
 //let collectiblesScraper = CollectablesScraper() // updated 12-01-2024
 //let gatheringNodeScraper = GatheringNodeScraper() // updated 12-02-2024
-
-let normalNodesScraper = NormalNodesScraper() // updated 12-02-2024
+//let normalNodesScraper = NormalNodesScraper() // updated 12-02-2024
 
 // Fishing Scrapers
-//let fishingNodesScraper = FishingNodesScraper()
 //let fishingNodeScraper = FishingNodeScraper()
 //let addWeatherChain = AddWeatherChain() // updated 11-26-2024
 
@@ -37,8 +35,7 @@ let normalNodesScraper = NormalNodesScraper() // updated 12-02-2024
 //try ephermeralNodesScraper.scrapeEphemeralNodesWiki()
 //try unspoiledNodesScraper.scrapeUnspoiledNodesWiki()
 //try collectiblesScraper.scrapeCollectiblesWiki()
-try normalNodesScraper.scrapeNormalNodesWiki()
-//try fishingNodesScraper.scrapeFishingNodesWiki()
+//try normalNodesScraper.scrapeNormalNodesWiki()
 
 //try gatheringNodeScraper.scrapeGatheringNodesWiki()
 //try fishingNodeScraper.scrapeGatheringNodesWiki()
