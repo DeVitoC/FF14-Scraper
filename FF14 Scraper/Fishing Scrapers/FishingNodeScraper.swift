@@ -9,20 +9,19 @@ import Foundation
 import SwiftSoup
 
 class FishingNodeScraper {
-    private var nodesToSearch: [String: String] = [:]
+//    private var nodesToSearch: [String: String] = [:]
     private var nodes: [FishingNode] = []
     private var missedNodes: [String] = []
-    private let locations = locationStrings
     private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
     
     func scrapeGatheringNodesWiki() throws {
-        guard let gamerEscapeWikiURL = URL(string: "https://ffxiv.gamerescape.com")
+        guard let gamerEscapeWikiURL = URL(string: "https://ffxiv.consolegameswiki.com")
         else { return }
         let fm = FileManager.default
         lazy var path: URL = {
             fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
         }()
-        let filenames = ["FishingNodesFolklore.json", "FishingNodesNormal.json", "FishingCollectiblesNormal.json"]
+        let filenames = ["FishingNodesFolklore.json", "EphemeralFishingNodes.json", "FishingNodesUnspoiled.json", "FishingCollectiblesNormal.json", "FishingNodesNormal.json"]
 
         for filename in filenames {
             let jsonDecoder = JSONDecoder()
