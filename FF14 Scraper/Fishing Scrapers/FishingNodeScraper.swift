@@ -15,64 +15,76 @@ class FishingNodeScraper {
     private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
     
     func scrapeGatheringNodesWiki() throws {
-        guard let gamerEscapeWikiURL = URL(string: "https://ffxiv.consolegameswiki.com")
-        else { return }
+        let gamerEscapeWikiURL = URL(string: "https://ffxiv.consolegameswiki.com")!
         let fm = FileManager.default
         lazy var path: URL = {
             fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
         }()
-        let filenames = ["FishingNodesFolklore.json", "EphemeralFishingNodes.json", "FishingNodesUnspoiled.json", "FishingCollectiblesNormal.json", "FishingNodesNormal.json"]
 
-        for filename in filenames {
-            let jsonDecoder = JSONDecoder()
+        let testing = true
 
-            // Get JSON
-            guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(filename).path) else { return }
-
-            // decode JSON
+        if testing {
             do {
-                let data = Data(jsonData)
-                let itemNames = try jsonDecoder.decode([String: String].self, from: data)
-                for (_, address) in itemNames {
-                    try scrapeGatheringNodes(gamerEscapeURL: gamerEscapeWikiURL, testItem: address)
-                    let seconds = 2.0
-                    DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {}
-                }
-            } catch let error {
-                NSLog("\(error)")
+                try scrapeFishingNode(gamerEscapeURL: gamerEscapeWikiURL, item: "/wiki/Dark_Knight_(Seafood)")
+                print(nodes)
+            } catch {
+                print("Error scraping fishing node: ", error)
             }
+        } else {
+            let filenames = ["FishingNodesFolklore.json", "EphemeralFishingNodes.json", "FishingNodesUnspoiled.json", "FishingCollectiblesNormal.json", "FishingNodesNormal.json"]
+            var nodesToSearch: [String : String] = [:]
+
+            for filename in filenames {
+                let jsonDecoder = JSONDecoder()
+
+                // Get JSON
+                guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(filename).path) else { return }
+
+                // decode JSON
+                do {
+                    let data = Data(jsonData)
+                    let itemNames = try jsonDecoder.decode([String: String].self, from: data)
+                    nodesToSearch.merge(itemNames) { (current, _) in current }
+                } catch let error {
+                    NSLog("\(error)")
+                }
+            }
+
+            for (_, address) in nodesToSearch {
+                try scrapeFishingNode(gamerEscapeURL: gamerEscapeWikiURL, item: address)
+                let seconds = 2.0
+                DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {}
+            }
+
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let json = try encoder.encode(nodes)
+            let jsonString = String(decoding: json, as: UTF8.self)
+
+            let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllFishingNodes.json")
+            try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
+
+            let missedNodesJson = try encoder.encode(missedNodes)
+            let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
+            let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodesFishing.json")
+            try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
         }
-
-//        try scrapeGatheringNodes(gamerEscapeURL: gamerEscapeWikiURL, testItem: "/wiki/Dark_Knight_(Seafood)")
-        
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        let json = try encoder.encode(nodes)
-        let jsonString = String(decoding: json, as: UTF8.self)
-
-        let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllFishingNodes.json")
-        try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
-
-        let missedNodesJson = try encoder.encode(missedNodes)
-        let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
-        let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodesFishing.json")
-        try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
     }
     
-    private func scrapeGatheringNodes(gamerEscapeURL: URL, testItem: String) throws {
+    private func scrapeFishingNode(gamerEscapeURL: URL, item: String) throws {
         // scrape GamerEscape wiki
-        let gamerEscapeWikiItemURL = gamerEscapeURL.appendingPathComponent(testItem)
+        let gamerEscapeWikiItemURL = gamerEscapeURL.appendingPathComponent(item)
         let gamerEscapeHTML = try String(contentsOf: gamerEscapeWikiItemURL)
         let gamerEscapeDocument = try SwiftSoup.parse(gamerEscapeHTML)
 
-        let itemName = testItem.replacingOccurrences(of: "/wiki/", with: "")
+        let itemName = item.replacingOccurrences(of: "/wiki/", with: "")
 
         // Get item elements
         guard let divGE1 = try gamerEscapeDocument.select("#mw-content-text").first(),
               let divGE2 = divGE1.children().first()
         else{
             print("unable to get gamerEscape content text div lines 70-71")
-            missedNodes.append(testItem)
+            missedNodes.append(item)
             return
         }
         var tableGE1: Element
@@ -80,7 +92,7 @@ class FishingNodeScraper {
             guard let tempTable = divGE2.children().first()
             else {
                 print("Unable to get gamerEscape content text table line 104")
-                missedNodes.append(testItem)
+                missedNodes.append(item)
                 return
             }
             tableGE1 = tempTable
@@ -88,13 +100,13 @@ class FishingNodeScraper {
             guard let tempTable = try divGE2.children().first()?.nextElementSibling()
             else {
                 print("unable to get gamerescape content text table line 115")
-                missedNodes.append(testItem)
+                missedNodes.append(item)
                 return
             }
             tableGE1 = tempTable
         } else {
             print("unable to get gamerescape content table line 115")
-            missedNodes.append(testItem)
+            missedNodes.append(item)
             return
         }
 
@@ -115,7 +127,7 @@ class FishingNodeScraper {
               let tbodyGE3 = trGE3.children().first()?.children().first()?.children().first()
         else {
             print("unable to get element in lines 98 - 115")
-            missedNodes.append(testItem)
+            missedNodes.append(item)
             return
         }
 
@@ -127,7 +139,7 @@ class FishingNodeScraper {
               descriptionTbody.children().count > 3
         else {
             print("unable to get element in line 123-127")
-            missedNodes.append(testItem)
+            missedNodes.append(item)
             return
         }
         let descriptionTR2 = descriptionTbody.children()[2]
@@ -153,11 +165,11 @@ class FishingNodeScraper {
         
         // get gathering location elements
         var itemLocationInfo: [LocationInfo] = []
-        guard let divGE5 = try gamerEscapeDocument.select("#Fishing").first() else { print("line 142"); missedNodes.append(testItem); return }
+        guard let divGE5 = try gamerEscapeDocument.select("#Fishing").first() else { print("line 142"); missedNodes.append(item); return }
         guard let tdGE5 = divGE5.parent()
         else {
             print("unable to get element in lines 143")
-            missedNodes.append(testItem)
+            missedNodes.append(item)
             return
         }
         
@@ -165,7 +177,7 @@ class FishingNodeScraper {
               let headerTbodyGE1 = headerDivGE1.children().first()?.children().first()
         else {
             print("unable to get element in line 150 - 151")
-            missedNodes.append(testItem)
+            missedNodes.append(item)
             return
         }
         
@@ -241,7 +253,7 @@ class FishingNodeScraper {
                 }
             } else {
                 print("unable to get elements in lines 208 - 209")
-                missedNodes.append(testItem)
+                missedNodes.append(item)
                 return
             }
 
@@ -351,7 +363,7 @@ class FishingNodeScraper {
               let desynthElementTD4 = try desynthElementTD3.nextElementSibling()
         else {
             print("unable to find Desynth in gamerescape document")
-            missedNodes.append(testItem)
+            missedNodes.append(item)
             return
         }
         let itemDesynth = try desynthElementTD4.text()
