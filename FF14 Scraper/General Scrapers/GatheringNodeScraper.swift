@@ -44,29 +44,37 @@ class GatheringNodeScraper {
                 nodes.removeAll()
                 missedNodes.removeAll()
 
-                for filename in filenames {
-                    let jsonDecoder = JSONDecoder()
+                let group = DispatchGroup()
+                fileNameLoop: for filename in filenames {
+                    group.enter()
+                    DispatchQueue.global().async { [weak self] in
+                        guard let self else { return }
+                        let jsonDecoder = JSONDecoder()
 
-                    // Get JSON
-                    guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(filename).path) else { return }
+                        // Get JSON
+                        guard let jsonData = NSData(contentsOfFile: path.appendingPathComponent(filename).path) else { return }
 
-                    // decode JSON
-                    do {
-                        let data = Data(jsonData)
-                        let itemNames = try jsonDecoder.decode([String: String].self, from: data)
-                        for (_, address) in itemNames {
-                            guard let item = address.removingPercentEncoding else {
-                                print("failed to format item")
-                                missedNodes.append(address)
-                                return
+                        // decode JSON
+                        do {
+                            let data = Data(jsonData)
+                            let itemNames = try jsonDecoder.decode([String: String].self, from: data)
+                            for (_, address) in itemNames {
+                                guard let item = address.removingPercentEncoding else {
+                                    print("failed to format item")
+                                    self.missedNodes.append(address)
+                                    return
+                                }
+                                try self.scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiUrl, item: item, section: sectionName)
+
+                                Thread.sleep(forTimeInterval: 2.0)
                             }
-                            try scrapeGatheringNodes(consoleGamesURL: consoleGamesWikiUrl, item: item, section: sectionName)
-                            let seconds = 2.0
-                            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {}
+                        } catch let error {
+                            NSLog("\(error)")
                         }
-                    } catch let error {
-                        NSLog("\(error)")
+
+                        group.leave()
                     }
+
                 }
 
                 let encoder = JSONEncoder()
