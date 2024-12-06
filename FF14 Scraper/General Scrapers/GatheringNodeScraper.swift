@@ -90,9 +90,7 @@ class GatheringNodeScraper {
                 let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodes\(sectionName).json")
                 try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
             }
-
         }
-
     }
 
     private func scrapeGatheringNodes(consoleGamesURL: URL, item: String, section: String) throws {

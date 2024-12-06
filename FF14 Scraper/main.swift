@@ -18,7 +18,7 @@ import SwiftSoup
 //let gatheringNodeScraper = GatheringNodeScraper() // updated 12-02-2024
 
 // Fishing Scrapers
-//let fishingNodeScraper = FishingNodeScraper()
+let fishingNodeScraper = FishingNodeScraper()
 //let addWeatherChain = AddWeatherChain() // updated 11-26-2024
 
 // Misc scrapers
@@ -38,7 +38,7 @@ import SwiftSoup
 //try normalNodesScraper.scrapeNormalNodesWiki()
 
 //try gatheringNodeScraper.scrapeGatheringNodesWiki()
-//try fishingNodeScraper.scrapeGatheringNodesWiki()
+fishingNodeScraper.scrapeGatheringNodesWiki()
 
 //fetchImagesScraper.fetchAllImages()
 //try updateExpac.fixExpacData()

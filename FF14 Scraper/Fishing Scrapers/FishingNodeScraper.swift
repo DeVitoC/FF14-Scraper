@@ -9,28 +9,30 @@ import Foundation
 import SwiftSoup
 
 class FishingNodeScraper {
-//    private var nodesToSearch: [String: String] = [:]
     private var nodes: [FishingNode] = []
     private var missedNodes: [String] = []
     private let type = ["Submersible Components", "Bone", "Cloth", "Dye", "Ingredient", "Leather", "Lumber", "Metal", "Part", "Reagent", "Seafood", "Stone"]
     
-    func scrapeGatheringNodesWiki() throws {
-        let gamerEscapeWikiURL = URL(string: "https://ffxiv.consolegameswiki.com")!
-        let fm = FileManager.default
-        lazy var path: URL = {
-            fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
-        }()
-
+    func scrapeGatheringNodesWiki() {
         let testing = true
-
         if testing {
+            guard let item = "/wiki/Dark_Knight_(Seafood)".removingPercentEncoding
+            else {
+                print("failed to format item")
+                return
+            }
+
             do {
-                try scrapeFishingNode(gamerEscapeURL: gamerEscapeWikiURL, item: "/wiki/Dark_Knight_(Seafood)")
+                try scrapeFishingNode(item: item, name: "Dark Knight (Seafood)")
                 print(nodes)
             } catch {
                 print("Error scraping fishing node: ", error)
             }
         } else {
+            let fm = FileManager.default
+            lazy var path: URL = {
+                fm.urls(for: .desktopDirectory, in: .userDomainMask)[0]
+            }()
             let filenames = ["FishingNodesFolklore.json", "EphemeralFishingNodes.json", "FishingNodesUnspoiled.json", "FishingCollectiblesNormal.json", "FishingNodesNormal.json"]
             var nodesToSearch: [String : String] = [:]
 
@@ -50,350 +52,127 @@ class FishingNodeScraper {
                 }
             }
 
-            for (_, address) in nodesToSearch {
-                try scrapeFishingNode(gamerEscapeURL: gamerEscapeWikiURL, item: address)
-                let seconds = 2.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {}
+            let group = DispatchGroup()
+            for (name, address) in nodesToSearch {
+                group.enter()
+                DispatchQueue.global().async { [weak self] in
+                    guard let self else { return }
+
+                    do {
+                        try scrapeFishingNode(item: address, name: name)
+                    } catch {
+                        print("error scraping fishing node: ", error)
+                    }
+
+                    Thread.sleep(forTimeInterval: 2.0)
+                }
+                group.leave()
             }
 
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            let json = try encoder.encode(nodes)
-            let jsonString = String(decoding: json, as: UTF8.self)
+            do {
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .prettyPrinted
+                let json = try encoder.encode(nodes)
+                let jsonString = String(decoding: json, as: UTF8.self)
 
-            let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllFishingNodes.json")
-            try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
+                let outputFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/AllFishingNodes.json")
+                try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
 
-            let missedNodesJson = try encoder.encode(missedNodes)
-            let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
-            let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodesFishing.json")
-            try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
+                let missedNodesJson = try encoder.encode(missedNodes)
+                let missedNodesJsonString = String(decoding: missedNodesJson, as: UTF8.self)
+                let missedNodesFile = URL(fileURLWithPath: "/Users/christopherdevito/Desktop/MissedNodesFishing.json")
+                try missedNodesJsonString.write(to: missedNodesFile, atomically: true, encoding: String.Encoding.utf8)
+            } catch {
+                print("error saving data to file: ", error)
+            }
         }
     }
-    
-    private func scrapeFishingNode(gamerEscapeURL: URL, item: String) throws {
-        // scrape GamerEscape wiki
-        let gamerEscapeWikiItemURL = gamerEscapeURL.appendingPathComponent(item)
-        let gamerEscapeHTML = try String(contentsOf: gamerEscapeWikiItemURL)
-        let gamerEscapeDocument = try SwiftSoup.parse(gamerEscapeHTML)
 
-        let itemName = item.replacingOccurrences(of: "/wiki/", with: "")
+    private func scrapeFishingNode(item: String, name: String) throws {
+        // scrape GamerEscape wiki
+        let consoleGamesWikiURL = URL(string: "https://ffxiv.consolegameswiki.com")!
+        let consoleGamesWikiItemURL = consoleGamesWikiURL.appendingPathComponent(item)
+        let consoleGamesHTML = try String(contentsOf: consoleGamesWikiItemURL)
+        let document = try SwiftSoup.parse(consoleGamesHTML)
 
         // Get item elements
-        guard let divGE1 = try gamerEscapeDocument.select("#mw-content-text").first(),
-              let divGE2 = divGE1.children().first()
+        guard let contentDiv = try document.select("#mw-content-text").first(),
+              let parserDiv = contentDiv.children().first(),
+              let infoBox = parserDiv.children().first(),
+              let imageDiv = try infoBox.children().first()?.nextElementSibling(),
+              let imageA = imageDiv.children().first()?.children().first(),
+              let headingP = try imageDiv.nextElementSibling(),
+              let statsDiv = try headingP.nextElementSibling(),
+              let listWrapperDiv = try statsDiv.nextElementSibling(),
+              let boxList = listWrapperDiv.children().first()
         else{
-            print("unable to get gamerEscape content text div lines 70-71")
-            missedNodes.append(item)
-            return
-        }
-        var tableGE1: Element
-        if divGE2.children().first()?.tagName() == "table" {
-            guard let tempTable = divGE2.children().first()
-            else {
-                print("Unable to get gamerEscape content text table line 104")
-                missedNodes.append(item)
-                return
-            }
-            tableGE1 = tempTable
-        } else if divGE2.children().first()?.tagName() == "div" {
-            guard let tempTable = try divGE2.children().first()?.nextElementSibling()
-            else {
-                print("unable to get gamerescape content text table line 115")
-                missedNodes.append(item)
-                return
-            }
-            tableGE1 = tempTable
-        } else {
-            print("unable to get gamerescape content table line 115")
+            print("unable to get content lines 70-71")
             missedNodes.append(item)
             return
         }
 
-        guard let tbodyGE1 = tableGE1.children().first(),
-              let trGE1 = tbodyGE1.children().first(),
-              let tdGE1 = trGE1.children().first(),
-              let tableGE2 = tdGE1.children().first(),
-              let tbodyGE2 = tableGE2.children().first(),
-              let trGE2 = tbodyGE2.children().first(),
-              let tdGE2 = trGE2.children().first(),
-              let aGE1 = tdGE2.children().first(),
-              let tdGE3 = try tdGE1.nextElementSibling(),
-              let aGE2 = tdGE3.children().first(),
-              let divGE3 = try aGE2.nextElementSibling()?.nextElementSibling(),
-              let tdGE4 = try tdGE2.nextElementSibling(),
-              let divGE4 = tdGE4.children().last(),
-              let trGE3 = try trGE1.nextElementSibling()?.nextElementSibling(),
-              let tbodyGE3 = trGE3.children().first()?.children().first()?.children().first()
-        else {
-            print("unable to get element in lines 98 - 115")
-            missedNodes.append(item)
-            return
-        }
+        // get image url
+        let itemImgUrl: String = try imageA.attr("href")
 
-        // Get description
-        guard let descriptionTR = tbodyGE1.children().last(),
-              let descriptionTD = descriptionTR.children().first(),
-              let descriptionTable = descriptionTD.children().first(),
-              let descriptionTbody = descriptionTable.children().first(),
-              descriptionTbody.children().count > 3
-        else {
-            print("unable to get element in line 123-127")
-            missedNodes.append(item)
-            return
-        }
-        let descriptionTR2 = descriptionTbody.children()[2]
-        let itemDescription = try descriptionTR2.text()
+        // get itemType
+        let listItems = boxList.children()
+        let itemType: String
+        let itemExpac: Int
 
-        // assign item values
-        let itemImgUrl = try aGE1.attr("href")
-        let patchText = try divGE3.text().components(separatedBy: " ")[1]
-        guard let patchNumber = Float(patchText) else { return }
-        let itemExpac = Int(patchNumber - 2)
-        let itemType = try divGE4.text()
-        var itemLvl: Int = 0
-        for div1 in tbodyGE3.children() {
-            guard let td1 = div1.children().first(),
-                  try td1.text().contains("Item Level"),
-                  let td2 = try td1.nextElementSibling(),
-                  let td2Text = Int(try td2.text())
-            else {
-                continue
-            }
-            itemLvl = td2Text
-        }
-        
-        // get gathering location elements
-        var itemLocationInfo: [LocationInfo] = []
-        guard let divGE5 = try gamerEscapeDocument.select("#Fishing").first() else { print("line 142"); missedNodes.append(item); return }
-        guard let tdGE5 = divGE5.parent()
-        else {
-            print("unable to get element in lines 143")
-            missedNodes.append(item)
-            return
-        }
-        
-        guard let headerDivGE1 = try tdGE5.children().first()?.nextElementSibling(),
-              let headerTbodyGE1 = headerDivGE1.children().first()?.children().first()
-        else {
-            print("unable to get element in line 150 - 151")
-            missedNodes.append(item)
-            return
-        }
-        
-        // get stars
-        var itemStars: Int = 0
-        for element in headerTbodyGE1.children() {
-            if try element.children().first()?.text().contains("Level") != false {
-                let levelText = try element.children()[0].text().components(separatedBy: ": ")
-                if levelText.count > 1 {
-                    let level = levelText[1]
-                    let levelComponents = level.components(separatedBy: " ")
-                    if levelComponents.count > 1 {
-                        itemStars = Int(levelComponents[1]) ?? 0
-                    }
-                } else {
-                    itemStars = 0
-                }
-            }
-        }
-
-        // get location information
-        for (index, div1) in tdGE5.children().enumerated() { // temp
-            guard index > 2,
-                  let locationTbody = div1.children().first()?.children().first(), // to get location, water type, and coords
-                  let baitTbody = try div1.children().first()?.nextElementSibling()?.children().first(), // to get bait, mooch, time, weather
-                  let locationLineTR = try locationTbody.children().first()?.nextElementSibling(),
-                  let locationLineTD = locationLineTR.children().first()
-            else {
-                continue
-            }
-
-            // get location for this node
-            guard let locationAHREF = locationLineTD.children().first()
-            else {
-                print("unable to get element in lines 180 - 183")
-//                missedNodes.append(testItem)
-                continue
-            }
-            let itemLocation = try locationAHREF.text()
-
-            // get water type for this node
-            guard let waterTypeTD = try locationLineTD.nextElementSibling()
-            else {
-                continue
-            }
-            let itemWaterType = try waterTypeTD.text()
-            let itemSource = getFishingSource(for: itemWaterType)
-
-            // get coords
-//            guard let coordsAHREF = try locationAHREF.nextElementSibling()
-//            else {
-//                continue
-//            }
-
-            let locationLineText = try locationLineTD.text()
-            var x: Int = 0, y: Int = 0
-            if let openParenIndex = locationLineText.lastIndex(of: "("),
-               let closeParenIndex = locationLineText.lastIndex(of: ")") {
-                let coordStartIndex = locationLineText.index(after: openParenIndex)
-                let coordEndIndex = locationLineText.index(before: closeParenIndex)
-                if coordEndIndex > coordStartIndex {
-                    let coords = locationLineText[coordStartIndex...coordEndIndex].components(separatedBy: "-")
-                    if coords.count <= 1 {
-                        x = 0
-                        y = 0
-                    } else {
-                        x = Int(Float(coords[0]) ?? 0)
-                        y = Int(Float(coords[1]) ?? 0)
-                    }
-                } else {
-                    x = 0
-                    y = 0
-                }
-            } else {
-                print("unable to get elements in lines 208 - 209")
-                missedNodes.append(item)
-                return
-            }
-
-            // get bait and mooch
-//            guard let baitLineTR = baitTbody.children().first()
-//            else {
-//                continue
-//            }
-//            let baitText = (try? baitLineTR.text()) ?? ""
-            var itemMooch = false
-            var itemBait: [String] = []
-            var itemTime: Int? = nil
-            var itemDuration: Int = 0
-            var itemWeather: [String] = []
-
-            for childTR in baitTbody.children() {
-                let childTRText = (try? childTR.text()) ?? ""
-
-                if childTRText.contains("Bait") {
-                    // Get Mooch
-                    itemMooch = childTRText.contains("Mooch")
-
-                    // Get bait
-                    if !itemMooch {
-                        let strippedBaitText = childTRText.replacingOccurrences(of: "Bait: ", with: "")
-                        itemBait = strippedBaitText.components(separatedBy: ",  ")
-                    }
-                } else if childTRText.contains("Mooch") {
-                    guard let childTD = childTR.children().first()
+        for listItem in listItems {
+            switch listItem.tagName() {
+                case "dt":
+                    guard let itemDD = try? listItem.nextElementSibling(),
+                          let itemDDText = try? listItem.text()
                     else {
+                        print("unable to get next item")
                         continue
                     }
-                    for child in childTD.children() {
-                        let childText = (try? child.text()) ?? ""
+                    let itemText = try listItem.text()
 
-                        if child.tagName() == "a" || childText == "►" {
-                            continue
-                        }
-
-                        guard let baitA = child.children().first()?.children().first()
-                        else {
-                            continue
-                        }
-                        let baitTitle = try baitA.attr("title")
-                        let strippedBaitTitle = baitTitle.replacingOccurrences(of: "HQ ", with: "")
-                        itemBait.append(strippedBaitTitle)
+                    if itemText.lowercased().contains("type") {
+                        let itemDDText = try listItem.text()
+                        print("itemDDText (type): ", itemDDText)
+                    } else if itemText.lowercased().contains("patch") {
+                        print("itemDDText (patch): ", itemDDText)
                     }
-                } else if childTRText.contains("Conditions") {
-                    // get Time
-                    let conditionsText = childTRText.replacingOccurrences(of: "Conditions: ", with: "")
-                    let timesText = conditionsText.components(separatedBy: ",")[0]
-                    let timeStrings = timesText.components(separatedBy: "-")
-
-                    // Make sure there is a start and end time
-                    if timeStrings.count < 2 {
-                        continue
-                    }
-
-                    // Get start time
-                    let startTimeString = timeStrings[0]
-                    let strippedStartString = startTimeString.replacingOccurrences(of: "AM", with: "").replacingOccurrences(of: "PM", with: "")
-                    var startInt = Int(strippedStartString) ?? 0
-                    let startTimeOfDay = startTimeString.replacingOccurrences(of: "\(startInt)", with: "")
-                    if startTimeOfDay == "AM" {
-                        itemTime = startInt
-                    } else if startTimeOfDay == "PM" {
-                        startInt += 12
-                        itemTime = startInt
-                    }
-
-                    // Get duration
-                    let endTimeString = timeStrings[1]
-                    let strippedEndString = endTimeString.replacingOccurrences(of: "AM", with: "").replacingOccurrences(of: "PM", with: "")
-                    var endInt = Int(strippedEndString) ?? 0
-                    let endTimeOfDay = endTimeString.replacingOccurrences(of: "\(endInt)", with: "")
-                    if endTimeOfDay == "PM" {
-                        endInt += 12
-                    }
-                    itemDuration = endInt > startInt ? endInt - startInt : endInt + 24 - startInt
-                } else if childTRText.contains("Weather") {
-                    // Get weather
-                    var weatherStringStripped = childTRText.replacingOccurrences(of: "Weather: ", with: "")
-                    weatherStringStripped = weatherStringStripped.replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
-                    itemWeather.append(weatherStringStripped)
-                }
+                default:
+                    continue
             }
-
-            let locationInfo = FishingNodeLocationInfo(time: itemTime, location: itemLocation, source: itemSource, stars: itemStars, x: x, y: y, duration: itemDuration, weather: itemWeather, mooch: itemMooch, bait: itemBait, waterType: itemWaterType)
-            itemLocationInfo.append(locationInfo)
         }
+        print(boxList)
 
-        guard let desynthTitleSpan = try gamerEscapeDocument.select("#Desynth").first(),
-              let desynthTitleDiv = desynthTitleSpan.parent(),
-              let desynthTitleTh = desynthTitleDiv.parent(),
-              let desynthTitleTR = desynthTitleTh.parent(),
-              let desynthElementTR = try desynthTitleTR.nextElementSibling(),
-              let desynthElementTD = desynthElementTR.children().first(),
-              let desynthElementDiv = desynthElementTD.children().first(),
-              let desynthElementTable = desynthElementDiv.children().first(),
-              let desynthElementTbody = desynthElementTable.children().first(),
-              let desynthElementTR2 = desynthElementTbody.children().first(),
-              let desynthElementTD2 = desynthElementTR2.children().first(),
-              let desynthElementTable2 = desynthElementTD2.children().first(),
-              let desynthElementTbody2 = desynthElementTable2.children().first(),
-              let desynthElementTR3 = desynthElementTbody2.children().first(),
-              let desynthElementTD3 = desynthElementTR3.children().first(),
-              let desynthElementTD4 = try desynthElementTD3.nextElementSibling()
-        else {
-            print("unable to find Desynth in gamerescape document")
-            missedNodes.append(item)
-            return
-        }
-        let itemDesynth = try desynthElementTD4.text()
 
-        for itemLocation in itemLocationInfo {
-            guard let itemLocation = itemLocation as? FishingNodeLocationInfo else { continue }
-            let fishingItem = FishingNode(
-                id: nodes.count,
-                name: itemName,
-                time: itemLocation.time,
-                duration: itemLocation.duration,
-                location: itemLocation.location,
-                img: itemImgUrl,
-                description: itemDescription,
-                type: itemType,
-                source: itemLocation.source,
-                lvl: itemLvl,
-                stars: itemStars,
-                x: itemLocation.x,
-                y: itemLocation.y,
-                expac: itemExpac,
-                desynthLvl: itemLvl,
-                desynthJob: itemDesynth,
-                mooch: itemLocation.mooch,
-                moochFrom: itemLocation.bait,
-                weather: itemLocation.weather,
-                waterType: itemLocation.waterType
-            )
-            nodes.append(fishingItem)
-        }
+//            let locationInfo = FishingNodeLocationInfo(time: itemTime, location: itemLocation, source: itemSource, stars: itemStars, x: x, y: y, duration: itemDuration, weather: itemWeather, mooch: itemMooch, bait: itemBait, waterType: itemWaterType)
+//            itemLocationInfo.append(locationInfo)
+
+
+//        for itemLocation in itemLocationInfo {
+//            guard let itemLocation = itemLocation as? FishingNodeLocationInfo else { continue }
+//            let fishingItem = FishingNode(
+//                id: nodes.count,
+//                name: name,
+//                time: itemLocation.time,
+//                duration: itemLocation.duration,
+//                location: itemLocation.location,
+//                img: itemImgUrl,
+//                description: itemDescription,
+//                type: itemType,
+//                source: itemLocation.source,
+//                lvl: itemLvl,
+//                stars: itemStars,
+//                x: itemLocation.x,
+//                y: itemLocation.y,
+//                expac: itemExpac,
+//                desynthLvl: itemLvl,
+//                desynthJob: itemDesynth,
+//                mooch: itemLocation.mooch,
+//                moochFrom: itemLocation.bait,
+//                weather: itemLocation.weather,
+//                waterType: itemLocation.waterType
+//            )
+//            nodes.append(fishingItem)
+//        }
     }
 
     /// Private method to get fishing source based on water type fish is found in
